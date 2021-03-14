@@ -3,93 +3,50 @@
 <head>
     <title>Decimus</title>
     <meta charset="UTF-8"/>
-    <style>
-        label.labelDie { font-size: 10em; }
-    </style>
+    <link rel="stylesheet" href="styles/style.css"/>
+
+    <!-- import google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp" rel="stylesheet"> 
+
+    <script type="text/javascript" src="js/script.js"></script> 
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div>
-        <div id="divDice" hidden>
-            <span>
-                <input id="inputDie1" type="checkbox" value="die1"/>
-                <label id="die1" for="inputDie1" class="labelDie"></label>
-            </span>
+    <div id="wrap">
+        <div id="divDice">
+            <div id="divDiceDice">
+                <span>
+                    <input id="inputDie1" type="checkbox" value="die1" class="checkDie"/>
+                    <label id="die1" for="inputDie1" class="labelDie"></label>
+                </span>
 
-            <span>
-                <input id="inputDie2" type="checkbox" value="die2"/>
-                <label id="die2" for="inputDie2" class="labelDie"></label>
-            </span>
+                <span>
+                    <input id="inputDie2" type="checkbox" value="die2" class="checkDie"/>
+                    <label id="die2" for="inputDie2" class="labelDie"></label>
+                </span>
 
-            <span>
-                <input id="inputDie3" type="checkbox" value="die3"/>
-                <label id="die3" for="inputDie3" class="labelDie"></label>
-            </span>
+                <span>
+                    <input id="inputDie3" type="checkbox" value="die3" class="checkDie"/>
+                    <label id="die3" for="inputDie3" class="labelDie"></label>
+                </span>
 
-            <span>
-                <input id="inputDie4" type="checkbox" value="die4"/>
-                <label id="die4" for="inputDie4" class="labelDie"></label>
-            </span>
+                <span>
+                    <input id="inputDie4" type="checkbox" value="die4" class="checkDie"/>
+                    <label id="die4" for="inputDie4" class="labelDie"></label>
+                </span>
 
-            <span>
-                <input id="inputDie5" type="checkbox" value="die5"/>
-                <label id="die5" for="inputDie5" class="labelDie"></label>
-            </span>
-
-            <button id="btnReroll" onclick="rerollDice()" data-times="0">Rerrolar</button>
-            <button id="btnEndRolls" onclick="endRollPhase()">Finalizar</button>
+                <span>
+                    <input id="inputDie5" type="checkbox" value="die5" class="checkDie"/>
+                    <label id="die5" for="inputDie5" class="labelDie"></label>
+                </span>
+            </div>
+            <div id="divDiceButtons">
+                <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
+                <button id="btnEndRolls" onclick="endRollPhase()">Quedar con estes</button>
+            </div>
         </div>
-        <button id="btnInitialThrow" onclick="rollInitialDice()">Primeira rolada</button>
+        <button id="btnInitialThrow" onclick="rollInitialDice()">Xogar</button>
     </div>
-    <script>
-        const MAX_REROLLS = 2;
-
-        function rollDie() {
-            return Math.floor(Math.random() * 6) + 1;
-        };
-
-        function rollDice(dice) {
-            const diceIcons = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
-            for (var i=0; i<dice.length; i++) {
-                dice[i].innerHTML = diceIcons[rollDie() - 1];
-            }
-        };
-
-        function rollInitialDice() {
-            document.getElementById('divDice').hidden = false;
-            document.getElementById('btnInitialThrow').hidden = true;
-            var checkboxes = document.querySelectorAll('input[type=checkbox]');
-            for (var i=0; i<checkboxes.length; i++) {
-                checkboxes[i].checked = false;
-            }
-            var dice = document.querySelectorAll('label[id^="die"]');
-            rollDice(dice);
-        };
-
-        function rerollDice() {
-            var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
-            if (checkboxes.length == 0) {
-                alert("Escolle os dados para rolar");
-                return;
-            }
-            var dice = Array.from(checkboxes).map(x => document.getElementById(x.value));
-            rollDice(dice);
-            var rerollButton = document.getElementById('btnReroll');
-            var newRerolls = parseInt(rerollButton.dataset.times) + 1;
-            rerollButton.dataset.times = newRerolls;
-            if (newRerolls == MAX_REROLLS) {
-                endRollPhase();
-            }
-        };
-
-        function endRollPhase() {
-            document.getElementById('btnReroll').hidden = true;
-            document.getElementById('btnEndRolls').hidden = true;
-            var checkboxes = document.querySelectorAll('input[type=checkbox]');
-            for (var i=0; i<checkboxes.length; i++) {
-                checkboxes[i].hidden = true;
-            }
-            alert("Rematada a fase de tiradas");
-        };
-    </script>
 </body>
 </html>
