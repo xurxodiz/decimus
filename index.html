@@ -7,46 +7,19 @@
 
     <!-- import google font -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp" rel="stylesheet">
 
-    <script type="text/javascript" src="js/script.js"></script> 
+
+    <script type="text/javascript" src="js/render.js"></script>
+    <script type="text/javascript" src="js/script.js"></script>
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/mustache.min.js"></script>
 </head>
 <body>
     <div id="wrap">
-        <div id="divDice">
-            <div id="divDiceDice">
-                <span>
-                    <input id="inputDie1" type="checkbox" value="die1" class="checkDie"/>
-                    <label id="die1" for="inputDie1" class="labelDie"></label>
-                </span>
-
-                <span>
-                    <input id="inputDie2" type="checkbox" value="die2" class="checkDie"/>
-                    <label id="die2" for="inputDie2" class="labelDie"></label>
-                </span>
-
-                <span>
-                    <input id="inputDie3" type="checkbox" value="die3" class="checkDie"/>
-                    <label id="die3" for="inputDie3" class="labelDie"></label>
-                </span>
-
-                <span>
-                    <input id="inputDie4" type="checkbox" value="die4" class="checkDie"/>
-                    <label id="die4" for="inputDie4" class="labelDie"></label>
-                </span>
-
-                <span>
-                    <input id="inputDie5" type="checkbox" value="die5" class="checkDie"/>
-                    <label id="die5" for="inputDie5" class="labelDie"></label>
-                </span>
-            </div>
-            <div id="divDiceButtons">
-                <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
-                <button id="btnEndRolls" onclick="endRollPhase()">Quedar con estes</button>
-            </div>
+        <div id="game">
+            <button id="btnInitialThrow" onClick="rollInitialDice()">Xogar</button>
         </div>
-        <button id="btnInitialThrow" onclick="rollInitialDice()">Xogar</button>
     </div>
 </body>
 </html>

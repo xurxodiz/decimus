@@ -56,7 +56,6 @@ input.checkDie:checked + label.labelDie {
 	width: 800px;
 	height: 300px;
 	margin: 0 auto;
-	display: none;
 	position: absolute;
 	top: 35vh;
 	left: 25vw;
