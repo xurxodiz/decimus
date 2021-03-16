@@ -1,0 +1,17 @@
+<div id="divDice">
+    <div id="divDiceDice">
+        {{#playerDice}}
+            <span>
+                <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
+                       onchange="updateSelectedDie({{key}}, this.checked)"/>
+                <label id="die{{key}}" for="inputDie{{key}}" class="labelDie">{{value}}</label>
+            </span>
+        {{/playerDice}}
+    </div>
+    {{#canReroll}}
+        <div id="divDiceButtons">
+            <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
+            <button id="btnEndRolls" onclick="endRollPhase()">Quedar con estes</button>
+        </div>
+    {{/canReroll}}
+</div>
