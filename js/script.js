@@ -56,10 +56,6 @@ function rerollDice() {
     game.remainingRerolls--;
     game.selectedDiceKeys.clear();
     renderGame(game);
-
-    if (game.remainingRerolls == 0) {
-        endRollPhase();
-    }
 };
 
 function endRollPhase() {
@@ -95,49 +91,41 @@ function finishSubgame() {
 };
 
 function bestDice(subgame, dice) {
+    let indexedDice = dice.map(function(value, index) {
+        return {value: value, index: index};
+    });
+    // ordered from biggest to smallest by value
+    indexedDice.sort((a, b) => b.value - a.value);
     switch(subgame) {
         case Subgames.BIGGEST:
-            return bestDiceBiggest(dice);
+            return bestDiceBiggest(indexedDice);
         case Subgames.SMALLEST:
-            return bestDiceSmallest(dice);
+            return bestDiceSmallest(indexedDice);
         case Subgames.ONE_AS_TWO:
-            return bestDiceOneAsTwo(dice);
+            return bestDiceOneAsTwo(indexedDice);
         case Subgames.PAIR_PLUS_ACE:
-            return bestDicePairPlusAce(dice);
+            return bestDicePairPlusAce(indexedDice);
     }
 };
 
 function bestDiceBiggest(dice) {
-    let indexedDice = dice.map(function(value, index) {
-        return {value: value, index: index};
-    });
-    indexedDice.sort((a, b) => b.value - a.value);
-    return indexedDice.slice(0, SUBGAME_DICE).map(x => x.index);
+    return dice.slice(0, SUBGAME_DICE).map(x => x.index);
 };
 
 function bestDiceSmallest(dice) {
-    let indexedDice = dice.map(function(value, index) {
-        return {value: value, index: index};
-    });
-    indexedDice.sort((a, b) => a.value - b.value);
-    return indexedDice.slice(0, SUBGAME_DICE).map(x => x.index);
+    return dice.slice(-SUBGAME_DICE).map(x => x.index);
 };
 
 function bestDiceOneAsTwo(dice) {
     for (var i = 0; i < MAX_DICE; i++) {
-        if (dice[i] < 2) {
-            continue;
+        if (dice[i].value == 1) {
+            // 1 can't be split into two other dice
+            break;
         }
-        for (var j = 0; j < MAX_DICE; j++) {
-            if (j == i || dice[j] >= dice[i]) {
-                continue;
-            }
-            for (var k = 0; k < MAX_DICE; k++) {
-                if (k == i || k == j) {
-                    continue;
-                }
-                if (dice[i] == dice[j] + dice[k]) {
-                    return [i, j, k];
+        for (var j = i+1; j < MAX_DICE; j++) {
+            for (var k = j+1; k < MAX_DICE; k++) {
+                if (dice[i].value == dice[j].value + dice[k].value) {
+                    return [dice[i].index, dice[j].index, dice[k].index];
                 }
             }
         }
@@ -146,24 +134,18 @@ function bestDiceOneAsTwo(dice) {
 };
 
 function bestDicePairPlusAce(dice) {
-    var result = [];
-    for (var i = 0; i < MAX_DICE; i++) {
-        if (dice[i] != 1) {
-            continue;
-        }
-        for (var j = 0; j < MAX_DICE; j++) {
-            if (j == i) {
-                continue;
+    // only proceed if there's at least one ace
+    if (dice[dice.length-1].value == 1) {
+        for (var i = 0; i < MAX_DICE; i++) {
+            if (i == dice.length - 2) {
+                // we are about to compare something to the last ace
+                // and the last ace can't be part of the pair
+                break;
             }
-            for (var k = 0; k < MAX_DICE; k++) {
-                if (k == i || k == j) {
-                    continue;
-                }
-                if (dice[k] == dice[j] && (result.length == 0 ||  dice[k] > dice[result[1]])) {
-                    result = [i, j, k];
-                }
+            if (dice[i].value == dice[i+1].value) {
+                return [dice[dice.length-1].index, dice[i].index, dice[i+1].index]
             }
         }
-    };
-    return result;
+    }
+    return [];
 };
