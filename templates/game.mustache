@@ -5,16 +5,19 @@
             {{#playerDice}}
                 <span>
                     <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
-                           onchange="updateSelectedDie({{key}}, this.checked)"/>
+                           onchange="updateSelectedDie({{key}}, this.checked)" {{#selected}}checked{{/selected}}/>
                     <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
                 </span>
             {{/playerDice}}
         </div>
-        {{#canReroll}}
-            <div id="divDiceButtons">
+        <div id="divDiceButtons">
+            {{#canReroll}}
                 <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
                 <button id="btnEndRolls" onclick="endRollPhase()">Quedar con estes</button>
-            </div>
-        {{/canReroll}}
+            {{/canReroll}}
+            {{#betsAreSet}}
+                <button id="btnFinishSubgame" onClick="finishSubgame()">Continuar</button>
+            {{/betsAreSet}}
+        </div>
     </div>
 </div>
