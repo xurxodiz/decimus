@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Decimus</title>
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="styles/style.css"/>
+    <head>
+        <title>Decimus</title>
+        <meta charset="UTF-8"/>
+        <link rel="icon" type="image/png" sizes="128x128" href="favicon.png">
 
-    <!-- import google font -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp" rel="stylesheet">
+        <link rel="stylesheet/less" type="text/css" href="styles/style.less"/>
+
+        <!-- import google font -->
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=MedievalSharp" rel="stylesheet">
 
 
-    <script type="text/javascript" src="js/render.js"></script>
-    <script type="text/javascript" src="js/script.js"></script>
-    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="js/mustache.min.js"></script>
-</head>
-<body>
-    <div id="wrap">
-        <div id="game">
-            <button id="btnInitialThrow" onClick="rollInitialDice()">Xogar</button>
-        </div>
-    </div>
-</body>
+        <script type="text/javascript" src="js/render.js"></script>
+        <script type="text/javascript" src="js/script.js"></script>
+        <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" src="js/less-4.1.1.min.js"></script>
+        <script type="text/javascript" src="js/mustache.min.js"></script>
+    </head>
+    <body onload="begin()">
+        <div id="canvas"></div>
+    </body>
 </html>
