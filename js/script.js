@@ -2,16 +2,22 @@ const MAX_DICE = 5;
 const MAX_REROLLS = 2;
 
 var game = {
+    "step": "splash",
     "playerDice": [],
     "remainingRerolls": 0,
     "selectedDiceKeys": new Set()
 };
+
+function begin() {
+    renderGame(game);
+}
 
 function rollDie() {
     return Math.floor(Math.random() * 6) + 1;
 };
 
 function rollInitialDice() {
+    game.step = "rolling";
     game.selectedDiceKeys.clear();
     game.remainingRerolls = MAX_REROLLS;
     for (const x of Array(MAX_DICE).keys()) {
@@ -40,6 +46,8 @@ function rerollDice() {
 
 function endRollPhase() {
     console.log("Rematada a fase de tiradas");
+    game.step = "bets";
+    renderGame(game);
 };
 
 function updateSelectedDie(key, checked) {

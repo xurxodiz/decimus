@@ -1,0 +1,122 @@
+* {
+	font-family: 'MedievalSharp', cursive;
+}
+
+body {
+	background-image: url("assets/background-transparent-50.png");
+	background-size: cover;
+	background-position: center;
+	width: 100vw;
+	height: 100vh;
+	margin: 0;
+	display: flex;
+}
+
+#canvas {
+	width: 800px;
+	height: 1200px;
+	max-width: 95vw;
+	max-height: 95vh;
+	margin: auto;
+}
+
+#game {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	width: 100%;
+	height: 100%;
+
+	&.splash {
+		#divDice {
+			display: none;
+		}
+	}
+
+	&.rolling {
+		#btnInitialThrow {
+			display: none;
+		}
+		.checkDie:checked + .labelDie {
+			border: 3px dashed saddlebrown;
+		}
+	}
+
+	&.bets {
+		#btnInitialThrow {
+			display: none;
+		}
+		#divDiceButtons {
+			display: none;
+		}
+	}
+}
+
+#btnInitialThrow {
+	height: 12.5%;
+	width: 30%;
+	background-color: wheat;
+	border: 3px solid saddlebrown;
+	font-size: 50px;
+}
+
+#divDice {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+}
+
+#divDiceDice {
+	margin-bottom: 20px;
+	display: flex;
+
+	span {
+		margin: 10px;
+
+		.checkDie {
+			display: none;
+		}
+
+		.labelDie {
+			display: flex;
+			border: 3px solid transparent;
+			width: 75px;
+			height: 75px;
+			font-size: 10em;
+			text-align: center;
+
+			i {
+				width: 50px;
+				height: 50px;
+				display: block;
+				background-size: 100%;
+				margin: auto;
+
+				&.face1 { background-image: url("assets/dice/one.png"); }
+				&.face2 { background-image: url("assets/dice/two.png"); }
+				&.face3 { background-image: url("assets/dice/three.png"); }
+				&.face4 { background-image: url("assets/dice/four.png"); }
+				&.face5 { background-image: url("assets/dice/five.png"); }
+				&.face6 { background-image: url("assets/dice/six.png"); }
+			}
+		}
+	}
+}
+
+
+#divDiceButtons {
+	display: flex;
+	justify-content: center;
+
+	button {
+		height: 75px;
+		width: 200px;
+		line-height: 75px;
+		font-size: 1.35rem;
+		background-color: wheat;
+		border: 2px solid saddlebrown;
+		margin: 10px;
+	}
+}
