@@ -117,11 +117,9 @@ function bestDiceSmallest(dice) {
 };
 
 function bestDiceOneAsTwo(dice) {
-    for (var i = 0; i < MAX_DICE; i++) {
-        if (dice[i].value == 1) {
-            // 1 can't be split into two other dice
-            break;
-        }
+    // start from third smallest die and grow bigger
+    for (var i = MAX_DICE-3; i >= 0; i--) {
+        // on each, go towards the smallest end adding pairs
         for (var j = i+1; j < MAX_DICE; j++) {
             for (var k = j+1; k < MAX_DICE; k++) {
                 if (dice[i].value == dice[j].value + dice[k].value) {
