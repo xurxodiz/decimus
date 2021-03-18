@@ -5,7 +5,8 @@ function renderGame(game) {
             let gameToRender = {
                 canReroll: game.remainingRerolls > 0 && game.step == Steps.ROLLING,
                 screen: game.step,
-                betsAreSet: game.step == Steps.BETS // TODO: Only when bets are final
+                betsAreSet: game.step == Steps.BETS, // TODO: Only when bets are final
+                diceNotAcknowledgedYet: game.step == Steps.ROLLING
             };
             gameToRender.playerDice = game.playerDice.map(function(x, i) {
                 let selected = game.selectedDiceKeys.has(i);

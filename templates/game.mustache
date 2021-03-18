@@ -13,8 +13,10 @@
         <div id="divDiceButtons">
             {{#canReroll}}
                 <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
-                <button id="btnEndRolls" onclick="endRollPhase()">Quedar con estes</button>
             {{/canReroll}}
+            {{#diceNotAcknowledgedYet}}
+                <button id="btnEndRolls" onclick="endRollPhase()">Quedar con estes</button>
+            {{/diceNotAcknowledgedYet}}
             {{#betsAreSet}}
                 <button id="btnFinishSubgame" onClick="finishSubgame()">Continuar</button>
             {{/betsAreSet}}
