@@ -18,8 +18,8 @@ function render(what) {
                 stepRolling: game.step == Steps.ROLLING,
                 canReroll: game.remainingRerolls > 0,
                 isFirstBet: game.lastAction == LastAction.NONE_YET,
-                currentBet: getCurrentBetText(game.lastAction),
                 betsAreSet: game.betsAreSet,
+                currentBetText: getCurrentBetText(game.lastAction),
                 explanationText: getExplationText(game.step, game.subgame),
                 raiseText: getRaiseText(game.lastAction)
             };
