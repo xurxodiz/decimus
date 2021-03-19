@@ -1,25 +1,42 @@
 <div id="game" class="{{screen}}">
-    <button id="btnInitialThrow" onClick="rollInitialDice()">Xogar</button>
+    <div id="explanation">{{explanationText}}</div>
     <div id="divDice">
-        <div id="divDiceDice">
-            {{#playerDice}}
-                <span>
-                    <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
-                           onchange="updateSelectedDie({{key}}, this.checked)" {{#selected}}checked{{/selected}}/>
-                    <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
-                </span>
-            {{/playerDice}}
-        </div>
-        <div id="divDiceButtons">
+        {{#playerDice}}
+            <span>
+                <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
+                       onchange="updateSelectedDie({{key}}, this.checked)" {{#selected}}checked{{/selected}}/>
+                <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
+            </span>
+        {{/playerDice}}
+    </div>
+    <div id="divButtons">
+        {{#stepSplash}}
+            <button id="btnInitialThrow" onClick="rollInitialDice()">Xogar</button>
+        {{/stepSplash}}
+        {{#stepRolling}}
             {{#canReroll}}
                 <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
             {{/canReroll}}
-            {{#diceNotAcknowledgedYet}}
-                <button id="btnEndRolls" onclick="endRollingStep()">Quedar con estes</button>
-            {{/diceNotAcknowledgedYet}}
+            <button id="btnEndRolls" onclick="endRollingStep()">Conforme</button>
+        {{/stepRolling}}
+        {{#stepBets}}
+            <div id="currentBet">Aposta actual: {{currentBet}}</div>
+            {{^betsAreSet}}
+                <div id="betButtons">
+                    {{#isFirstBet}}
+                        <button id="btnBetPass" onClick="betPass()">Pasar</button>
+                    {{/isFirstBet}}
+                    {{^isFirstBet}}
+                        <button id="btnBetFold" onClick="betFold()">Retirarse</button>
+                        <button id="btnBetCheck" onClick="betCheck()">Ver</button>
+                    {{/isFirstBet}}
+                    <button id="btnBetRaise" onClick="betRaise($('#inputBetRaise')[0].value)">{{raiseText}}</button>
+                    <input  id="inputBetRaise" type="number" value="0" min="0" max="10">
+                </div>
+            {{/betsAreSet}}
             {{#betsAreSet}}
                 <button id="btnFinishSubgame" onClick="finishSubgame()">Continuar</button>
             {{/betsAreSet}}
-        </div>
+        {{/stepBets}}
     </div>
 </div>
