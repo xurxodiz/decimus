@@ -1,4 +1,13 @@
-function renderGame(game) {
+function begin() {
+    beginGame(render);
+};
+
+function render(what) {
+    if (typeof(what) == "string") {
+        alert(what);
+        return;
+    }
+    let game = what;
     fetch('templates/game.mustache')
         .then((response) => response.text())
         .then((template) => {

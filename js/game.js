@@ -6,7 +6,7 @@ let Steps = {
     SPLASH: "splash",
     ROLLING: "rolling",
     BETS: "bets",
-    RESULT: "result"
+    RESULTS: "results"
 };
 
 let Subgames = {
@@ -24,9 +24,13 @@ var game = {
     selectedDiceKeys: new Set()
 };
 
+var renderFun;
+
 // Splash step
-function begin() {
-    renderGame(game);
+function beginGame(newRenderFun) {
+    game.step = Steps.SPLASH;
+    renderFun = newRenderFun;
+    renderFun(game);
 };
 
 // Rolling step
@@ -35,18 +39,18 @@ function rollDie() {
 };
 
 function rollInitialDice() {
-    game.step = Steps.ROLLING,
+    game.step = Steps.ROLLING;
     game.selectedDiceKeys.clear();
     game.remainingRerolls = MAX_REROLLS;
     for (const x of Array(MAX_DICE).keys()) {
         game.playerDice[x] = rollDie();
     }
-    renderGame(game);
+    renderFun(game);
 };
 
 function rerollDice() {
     if (!game.selectedDiceKeys.size) {
-        alert("Escolle os dados para rolar");
+        renderFun("Escolle os dados para rolar");
         return;
     }
 
@@ -55,10 +59,10 @@ function rerollDice() {
     );
     game.remainingRerolls--;
     game.selectedDiceKeys.clear();
-    renderGame(game);
+    renderFun(game);
 };
 
-function endRollPhase() {
+function endRollingStep() {
     game.step = Steps.BETS;
     startSubgame(Subgames.BIGGEST);
 };
@@ -78,7 +82,7 @@ function startSubgame(subgame) {
     bestDice(subgame, game.playerDice).forEach(x =>
         game.selectedDiceKeys.add(x)
     );
-    renderGame(game);
+    renderFun(game);
 };
 
 function finishSubgame() {
@@ -86,7 +90,7 @@ function finishSubgame() {
     if (nextSubgame < Object.keys(Subgames).length) {
         startSubgame(nextSubgame);
     } else {
-        // nextPhase
+        showResults();
     }
 };
 
@@ -147,3 +151,27 @@ function bestDicePairPlusAce(dice) {
     }
     return [];
 };
+
+
+// Results step
+function showResults() {
+    game.step = Steps.RESULTS;
+    renderFun();
+};
+
+// Exports
+module.exports = {
+    // Enums
+    Steps: Steps,
+    Subgames: Subgames,
+    // Objects
+    game: game,
+    // Functions
+    beginGame: beginGame,
+    bestDice: bestDice,
+    endRollingStep: endRollingStep,
+    finishSubgame: finishSubgame,
+    rerollDice: rerollDice,
+    rollInitialDice: rollInitialDice,
+    updateSelectedDie: updateSelectedDie
+}
