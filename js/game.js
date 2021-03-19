@@ -2,6 +2,12 @@ const MAX_DICE = 5;
 const MAX_REROLLS = 2;
 const SUBGAME_DICE = 3;
 
+let Bets = {
+    PASS: -1,
+    FOLD: -2,
+    CHECK: -3
+};
+
 let Steps = {
     SPLASH: "splash",
     ROLLING: "rolling",
@@ -21,16 +27,25 @@ var game = {
     subgame: Subgames.BIGGEST,
     playerDice: [],
     remainingRerolls: 0,
-    selectedDiceKeys: new Set()
+    selectedDiceKeys: new Set(),
+    playerBet: 0,
+    rivalBet: 0,
+    playerPoints: 0,
+    rivalPoints: 0,
+    betsAreSet: false,
+    pendingBets: {},
+    renderFun: undefined,
+    rival: undefined
 };
 
-var renderFun;
-
 // Splash step
-function beginGame(newRenderFun) {
+function beginGame(newRenderFun, rival) {
     game.step = Steps.SPLASH;
-    renderFun = newRenderFun;
-    renderFun(game);
+    game.renderFun = newRenderFun;
+    game.rival = rival;
+    game.playerPoints = 0;
+    game.rivalPoints = 0;
+    game.renderFun(game);
 };
 
 // Rolling step
@@ -45,12 +60,12 @@ function rollInitialDice() {
     for (const x of Array(MAX_DICE).keys()) {
         game.playerDice[x] = rollDie();
     }
-    renderFun(game);
+    game.renderFun(game);
 };
 
 function rerollDice() {
     if (!game.selectedDiceKeys.size) {
-        renderFun("Escolle os dados para rolar");
+        game.renderFun("Escolle os dados para rolar");
         return;
     }
 
@@ -59,11 +74,12 @@ function rerollDice() {
     );
     game.remainingRerolls--;
     game.selectedDiceKeys.clear();
-    renderFun(game);
+    game.renderFun(game);
 };
 
 function endRollingStep() {
     game.step = Steps.BETS;
+    game.pendingBets = {};
     startSubgame(Subgames.BIGGEST);
 };
 
@@ -79,13 +95,41 @@ function updateSelectedDie(key, checked) {
 function startSubgame(subgame) {
     game.subgame = subgame;
     game.selectedDiceKeys.clear();
+    game.playerBet = 0;
+    game.rivalBet = 0;
+    game.betsAreSet = false;
     bestDice(subgame, game.playerDice).forEach(x =>
         game.selectedDiceKeys.add(x)
     );
-    renderFun(game);
+    game.renderFun(game);
+};
+
+function betCheck() {
+    game.playerBet = game.rivalBet;
+    game.pendingBets[game.subgame] = game.rivalBet;
+    game.betsAreSet = true;
+    game.renderFun(game);
+};
+
+function betFold() {
+    game.rivalPoints += Math.max(1, game.playerBet);
+    game.betsAreSet = true;
+    game.renderFun(game);
+};
+
+function betPass() {
+    rivalBet();
+    game.renderFun(game);
+};
+
+function betRaise(amount) {
+    game.playerBet = game.rivalBet + amount;
+    rivalBet();
+    game.renderFun(game);
 };
 
 function finishSubgame() {
+    // TODO: Add "reflection" step before going to the next part.
     let nextSubgame = game.subgame + 1;
     if (nextSubgame < Object.keys(Subgames).length) {
         startSubgame(nextSubgame);
@@ -94,6 +138,27 @@ function finishSubgame() {
     }
 };
 
+function rivalBet() {
+    let action = game.rival.bet(game);
+    switch(action) {
+        case Bets.PASS:
+            game.betsAreSet = true;
+            break;
+        case Bets.FOLD:
+            game.playerPoints += Math.max(1, game.rivalBet);
+            game.betsAreSet = true;
+            break;
+        case Bets.CHECK:
+            game.rivalBet = game.playerBet;
+            game.pendingBets[game.subgame] = game.playerBet;
+            game.betsAreSet = true;
+            break;
+        default:
+            game.rivalBet = game.playerBet + action;
+    }
+};
+
+// Dice evaluation
 function bestDice(subgame, dice) {
     let indexedDice = dice.map(function(value, index) {
         return {value: value, index: index};
@@ -152,16 +217,16 @@ function bestDicePairPlusAce(dice) {
     return [];
 };
 
-
 // Results step
 function showResults() {
     game.step = Steps.RESULTS;
-    renderFun();
+    game.renderFun();
 };
 
 // Exports
 module.exports = {
     // Enums
+    Bets: Bets,
     Steps: Steps,
     Subgames: Subgames,
     // Objects
@@ -169,9 +234,13 @@ module.exports = {
     // Functions
     beginGame: beginGame,
     bestDice: bestDice,
+    betCheck: betCheck,
+    betFold: betFold,
+    betPass: betPass,
+    betRaise: betRaise,
     endRollingStep: endRollingStep,
     finishSubgame: finishSubgame,
     rerollDice: rerollDice,
     rollInitialDice: rollInitialDice,
     updateSelectedDie: updateSelectedDie
-}
+};

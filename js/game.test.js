@@ -1,7 +1,12 @@
 let js = require('./game.js');
 
+let nextRivalBet = undefined;
+let rival = {
+    bet: function(x) { return nextRivalBet; }
+};
+
 const mockRenderFun = jest.fn();
-beforeEach(() => { js.beginGame(mockRenderFun); });
+beforeEach(() => { js.beginGame(mockRenderFun, rival); });
 
 test('game starts on splash step', () => {
     expect(js.game.step).toBe(js.Steps.SPLASH);
@@ -115,6 +120,201 @@ describe('on the bets step', () => {
                     test('goes to the results step', () => {
                         expect(js.game.step).toBe(js.Steps.RESULTS);
                     });
+                });
+            });
+        });
+    });
+
+    describe('the player/rival', () => {
+        let raise = 3;
+        describe("passes/passes", () => {
+            beforeEach(() => {
+                nextRivalBet = js.Bets.PASS;
+                js.betPass();
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('player bet is 0', () => {
+                expect(js.game.playerBet).toBe(0);
+            });
+
+            test('rival bet is 0', () => {
+                expect(js.game.rivalBet).toBe(0);
+            });
+
+            test('subgame pending bets are empty', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+        });
+
+        describe("passes/raises", () => {
+            beforeEach(() => {
+                nextRivalBet = raise;
+                js.betPass();
+            });
+
+            test('bets are not set', () => {
+                expect(js.game.betsAreSet).toBeFalsy();
+            });
+
+            test('player bet is 0', () => {
+                expect(js.game.playerBet).toBe(0);
+            });
+
+            test('rival bet is increased', () => {
+                expect(js.game.rivalBet).toBe(raise);
+            });
+
+            test('subgame pending bets are empty', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+        });
+
+        describe("raises/fold", () => {
+            beforeEach(() => {
+                nextRivalBet = js.Bets.FOLD;
+                js.betRaise(raise);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('player bet is raised', () => {
+                expect(js.game.playerBet).toBe(raise);
+            });
+
+            test('rival bet is 0', () => {
+                expect(js.game.rivalBet).toBe(0);
+            });
+
+            test('subgame pending bets are empty', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points increase by 1', () => {
+                expect(js.game.playerPoints).toBe(1);
+            });
+        });
+
+        describe("raises/check", () => {
+            beforeEach(() => {
+                nextRivalBet = js.Bets.CHECK;
+                js.betRaise(raise);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('player bet is raised', () => {
+                expect(js.game.playerBet).toBe(raise);
+            });
+
+            test('rival bet is raised', () => {
+                expect(js.game.rivalBet).toBe(raise);
+            });
+
+            test('subgame pending bets are set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBe(raise);
+            });
+
+            test('player points don\'t increase', () => {
+                expect(js.game.playerPoints).toBe(0);
+            });
+
+            test('rival points don\'t increase', () => {
+                expect(js.game.rivalPoints).toBe(0);
+            });
+        });
+
+        describe("raises/raises", () => {
+            let rivalRaise = 4;
+            beforeEach(() => {
+                nextRivalBet = rivalRaise;
+                js.betRaise(raise);
+            });
+
+            test('bets are not set', () => {
+                expect(js.game.betsAreSet).toBeFalsy();
+            });
+
+            test('player bet is raised', () => {
+                expect(js.game.playerBet).toBe(raise);
+            });
+
+            test('rival bet is raised twice', () => {
+                expect(js.game.rivalBet).toBe(raise+rivalRaise);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points don\'t increase', () => {
+                expect(js.game.playerPoints).toBe(0);
+            });
+
+            test('rival points don\'t increase', () => {
+                expect(js.game.rivalPoints).toBe(0);
+            });
+
+            describe("and player folds", () => {
+                beforeEach(() => { js.betFold(); });
+
+                test('bets are set', () => {
+                    expect(js.game.betsAreSet).toBeTruthy();
+                });
+
+                test('player bet remains', () => {
+                    expect(js.game.playerBet).toBe(raise);
+                });
+
+                test('rival bet remains', () => {
+                    expect(js.game.rivalBet).toBe(raise+rivalRaise);
+                });
+
+                test('subgame pending bets are not set', () => {
+                    expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+                });
+
+                test('player points don\'t increase', () => {
+                    expect(js.game.playerPoints).toBe(0);
+                });
+
+                test('rival points increase by last player raise', () => {
+                    expect(js.game.rivalPoints).toBe(raise);
+                });
+            });
+
+            describe("and player checks", () => {
+                beforeEach(() => { js.betCheck(); });
+
+                test('bets are set', () => {
+                    expect(js.game.betsAreSet).toBeTruthy();
+                });
+
+                test('player bet increases', () => {
+                    expect(js.game.playerBet).toBe(raise+rivalRaise);
+                });
+
+                test('rival bet remains', () => {
+                    expect(js.game.rivalBet).toBe(raise+rivalRaise);
+                });
+
+                test('subgame pending bets are set', () => {
+                    expect(js.game.pendingBets[js.game.subgame]).toBe(raise+rivalRaise);
+                });
+
+                test('player points don\'t increase', () => {
+                    expect(js.game.playerPoints).toBe(0);
+                });
+
+                test('rival points don\'t increase', () => {
+                    expect(js.game.rivalPoints).toBe(0);
                 });
             });
         });
