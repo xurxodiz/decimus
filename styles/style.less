@@ -16,6 +16,17 @@
 	filter: drop-shadow(0 0 0.75rem @color-border-soft);
 }
 
+
+/* rerolling animation */
+@keyframes rerolled {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
 /* element styling */
 
 * {
@@ -183,6 +194,13 @@ button {
 				&.face4 { background-image: url("assets/dice/four.png"); }
 				&.face5 { background-image: url("assets/dice/five.png"); }
 				&.face6 { background-image: url("assets/dice/six.png"); }
+
+				&.rerolled {
+				  animation-name: rerolled;
+				  animation-duration: 100ms;
+				  animation-iteration-count: 2;
+				  animation-timing-function: linear; 
+				}
 			}
 		}
 	}

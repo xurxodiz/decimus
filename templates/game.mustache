@@ -51,7 +51,7 @@
             <span>
                 <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
                        onchange="updateSelectedDie({{key}}, this.checked)" {{#selected}}checked{{/selected}}/>
-                <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
+                <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}{{#rerolled}} rerolled{{/rerolled}}"></i></label>
             </span>
         {{/playerDice}}
     </div>

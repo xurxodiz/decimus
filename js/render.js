@@ -23,7 +23,8 @@ function render(game) {
             };
             gameToRender.playerDice = game.playerDice.map(function(x, i) {
                 let selected = game.selectedDiceKeys.has(i);
-                return {key: i, value: x, selected: selected};
+                let rerolled = game.justRerolled.has(i);
+                return {key: i, value: x, rerolled: rerolled, selected: selected};
             });
             if (game.step == Steps.RESULTS) {
                 let rivalDice = game.rival.dice;

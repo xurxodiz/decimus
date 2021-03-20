@@ -43,6 +43,7 @@ var game = {
     subgame: Subgames.BIGGEST,
     playerDice: [],
     remainingRerolls: 0,
+    justRerolled: new Set(),
     selectedDiceKeys: new Set(),
     isPlayerStarting: true,
     playerBet: 0,
@@ -100,6 +101,7 @@ function rerollDice() {
         game.playerDice[x] = rollDie()
     );
     game.remainingRerolls--;
+    game.justRerolled = new Set(game.selectedDiceKeys);
     game.selectedDiceKeys.clear();
     game.renderFun(game);
 };
@@ -107,6 +109,7 @@ function rerollDice() {
 function endRollingStep() {
     game.step = Steps.BETS;
     game.pendingBets = {};
+    game.justRerolled = new Set();
     startSubgame(Subgames.BIGGEST);
 };
 
