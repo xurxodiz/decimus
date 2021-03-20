@@ -3,6 +3,13 @@ const MAX_AI_ROLLS = 3;
 const SIMULATION_RUNS = 100;
 
 function initializeAI() {
+    return {
+        bet: betFunction,
+        roll: rollFunction
+    };
+};
+
+function rollFunction(game) {
     // AI rolls all dice N times and keeps the best dice
     // (this is different from the player rolling rules
     // but should give similar results).
@@ -19,11 +26,8 @@ function initializeAI() {
             bestWinRate = winRate;
         }
     }
-    return {
-        bet: betFunction,
-        dice: bestDice,
-        winRate: bestWinRate
-    };
+    game.rival.dice = bestDice;
+    game.rival.winRate = bestWinRate;
 };
 
 function betFunction(game) {
