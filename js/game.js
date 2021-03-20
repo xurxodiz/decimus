@@ -85,8 +85,10 @@ function rollInitialDice() {
     game.step = Steps.ROLLING;
     game.selectedDiceKeys.clear();
     game.remainingRerolls = MAX_REROLLS;
+    game.justRerolled = new Set();
     for (const x of Array(MAX_DICE).keys()) {
         game.playerDice[x] = rollDie();
+        game.justRerolled.add(x);
     }
     game.rival.roll(game);
     game.renderFun(game);
