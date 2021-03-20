@@ -2,7 +2,8 @@ let js = require('./game.js');
 
 let nextRivalBet = undefined;
 let rival = {
-    bet: function(x) { return nextRivalBet; }
+    bet: function(x) { return nextRivalBet; },
+    dice: [1,2,3,4,5]
 };
 
 const mockRenderFun = jest.fn();
@@ -123,6 +124,11 @@ describe('on the bets step', () => {
                 });
             });
         });
+    });
+
+    test('player can\'t raise zero', () => {
+        js.betRaise(0);
+        expect(js.game.playerBet).toBe(0);
     });
 
     describe('the player/rival', () => {
@@ -319,6 +325,202 @@ describe('on the bets step', () => {
             });
         });
     });
+
+    describe('when betting on one-as-two', () => {
+        describe('without game', () => {
+            beforeEach(() => {
+                js.game.playerDice = [1, 1, 1, 1, 1];
+                js.game.rival.dice = [2, 2, 2, 2, 2];
+                js.startSubgame(js.Subgames.ONE_AS_TWO);
+            });
+
+            test('there\'s no game', () => {
+                expect(js.game.lastAction).toBe(js.LastAction.NO_GAME);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('bet value is 0', () => {
+                expect(js.game.lastBetStanding).toBe(0);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points don\'t increase', () => {
+                expect(js.game.playerPoints).toBe(0);
+            });
+
+            test('rival points don\'t increase', () => {
+                expect(js.game.rivalPoints).toBe(0);
+            });
+        });
+
+        describe('without user game', () => {
+            beforeEach(() => {
+                js.game.playerDice = [5, 5, 5, 5, 5];
+                js.game.rival.dice = [1, 2, 3, 4, 5];
+                js.startSubgame(js.Subgames.ONE_AS_TWO);
+            });
+
+            test('there\'s no user game', () => {
+                expect(js.game.lastAction).toBe(js.LastAction.USER_NO_GAME);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('bet value is 1', () => {
+                expect(js.game.lastBetStanding).toBe(1);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points don\'t increase', () => {
+                expect(js.game.playerPoints).toBe(0);
+            });
+
+            test('rival points increase by 1', () => {
+                expect(js.game.rivalPoints).toBe(1);
+            });
+        });
+
+       describe('without rival game', () => {
+            beforeEach(() => {
+                js.game.playerDice = [6, 2, 3, 4, 5];
+                js.game.rival.dice = [6, 4, 4, 3, 4];
+                js.startSubgame(js.Subgames.ONE_AS_TWO);
+            });
+
+            test('there\'s no rival game', () => {
+                expect(js.game.lastAction).toBe(js.LastAction.RIVAL_NO_GAME);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('bet value is 1', () => {
+                expect(js.game.lastBetStanding).toBe(1);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points increase by 1', () => {
+                expect(js.game.playerPoints).toBe(1);
+            });
+
+            test('rival points don\'t increase', () => {
+                expect(js.game.rivalPoints).toBe(0);
+            });
+        });
+    });
+
+    describe('when betting on pair-plus-ace', () => {
+        describe('without game', () => {
+            beforeEach(() => {
+                js.game.playerDice = [1, 4, 3, 2, 1];
+                js.game.rival.dice = [2, 2, 2, 2, 2];
+                js.startSubgame(js.Subgames.PAIR_PLUS_ACE);
+            });
+
+            test('there\'s no game', () => {
+                expect(js.game.lastAction).toBe(js.LastAction.NO_GAME);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('bet value is 0', () => {
+                expect(js.game.lastBetStanding).toBe(0);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points don\'t increase', () => {
+                expect(js.game.playerPoints).toBe(0);
+            });
+
+            test('rival points don\'t increase', () => {
+                expect(js.game.rivalPoints).toBe(0);
+            });
+        });
+
+        describe('without user game', () => {
+            beforeEach(() => {
+                js.game.playerDice = [5, 5, 5, 5, 5];
+                js.game.rival.dice = [1, 2, 5, 4, 5];
+                js.startSubgame(js.Subgames.PAIR_PLUS_ACE);
+            });
+
+            test('there\'s no user game', () => {
+                expect(js.game.lastAction).toBe(js.LastAction.USER_NO_GAME);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('bet value is 1', () => {
+                expect(js.game.lastBetStanding).toBe(1);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points don\'t increase', () => {
+                expect(js.game.playerPoints).toBe(0);
+            });
+
+            test('rival points increase by 1', () => {
+                expect(js.game.rivalPoints).toBe(1);
+            });
+        });
+
+       describe('without rival game', () => {
+            beforeEach(() => {
+                js.game.playerDice = [6, 2, 2, 1, 5];
+                js.game.rival.dice = [6, 4, 4, 4, 4];
+                js.startSubgame(js.Subgames.PAIR_PLUS_ACE);
+            });
+
+            test('there\'s no rival game', () => {
+                expect(js.game.lastAction).toBe(js.LastAction.RIVAL_NO_GAME);
+            });
+
+            test('bets are set', () => {
+                expect(js.game.betsAreSet).toBeTruthy();
+            });
+
+            test('bet value is 1', () => {
+                expect(js.game.lastBetStanding).toBe(1);
+            });
+
+            test('subgame pending bets are not set', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            });
+
+            test('player points increase by 1', () => {
+                expect(js.game.playerPoints).toBe(1);
+            });
+
+            test('rival points don\'t increase', () => {
+                expect(js.game.rivalPoints).toBe(0);
+            });
+        });
+    });
 });
 
 describe('best dice functions', () => {
@@ -410,6 +612,100 @@ describe('best dice functions', () => {
                 expect(bestDiceIndexes).toContain(1);
                 expect(bestDiceIndexes).toContain(4);
             });
+        });
+    });
+});
+
+describe('determine winner', () => {
+   describe('biggest subgame', () => {
+        test('dice1 wins', () => {
+            let dice1 = [6, 6, 6, 6, 6];
+            let dice2 = [1, 1, 1, 1, 1];
+            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2)).toBe(1);
+        });
+
+        test('dice2 wins', () => {
+            let dice1 = [5, 5, 6, 6, 5];
+            let dice2 = [1, 1, 6, 6, 6];
+            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2)).toBe(-1);
+        });
+
+        test('dice1 wins when tied', () => {
+            let dice1 = [1, 1, 1, 1, 1];
+            let dice2 = [1, 1, 1, 1, 1];
+            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2)).toBe(1);
+        });
+    });
+
+    describe('smallest subgame', () => {
+        test('dice1 wins', () => {
+            let dice1 = [1, 1, 1, 6, 6];
+            let dice2 = [2, 2, 2, 2, 2];
+            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2)).toBe(1);
+        });
+
+        test('dice2 wins', () => {
+            let dice1 = [5, 5, 6, 6, 5];
+            let dice2 = [1, 1, 1, 6, 6];
+            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2)).toBe(-1);
+        });
+
+        test('dice1 wins when tied', () => {
+            let dice1 = [1, 1, 1, 1, 1];
+            let dice2 = [1, 1, 1, 1, 1];
+            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2)).toBe(1);
+        });
+    });
+
+    describe('one-as-two subgame', () => {
+        test('dice1 wins', () => {
+            let dice1 = [1, 1, 1, 2, 2];
+            let dice2 = [2, 2, 4, 2, 2];
+            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(1);
+        });
+
+        test('dice2 wins', () => {
+            let dice1 = [5, 5, 6, 6, 5];
+            let dice2 = [1, 2, 2, 4, 6];
+            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(-1);
+        });
+
+        test('dice1 wins when tied when game', () => {
+            let dice1 = [1, 1, 1, 2, 1];
+            let dice2 = [1, 1, 2, 1, 1];
+            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(1);
+        });
+
+        test('both tie if there\'s no game', () => {
+            let dice1 = [4, 4, 4, 4, 6];
+            let dice2 = [5, 5, 3, 4, 5];
+            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(0);
+        });
+    });
+
+    describe('pair-plus-ace subgame', () => {
+        test('dice1 wins', () => {
+            let dice1 = [1, 1, 1, 2, 2];
+            let dice2 = [2, 2, 4, 2, 2];
+            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(1);
+        });
+
+        test('dice2 wins', () => {
+            let dice1 = [1, 5, 2, 2, 5];
+            let dice2 = [1, 6, 2, 4, 6];
+            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(-1);
+        });
+
+        test('dice1 wins when tied when game', () => {
+            let dice1 = [1, 1, 1, 2, 1];
+            let dice2 = [1, 1, 2, 1, 1];
+            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(1);
+        });
+
+        test('both tie if there\'s no game', () => {
+            let dice1 = [4, 4, 3, 2, 6];
+            let dice2 = [1, 2, 3, 4, 5];
+            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(0);
         });
     });
 });
