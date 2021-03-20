@@ -3,6 +3,7 @@ let js = require('./game.js');
 let nextRivalBet = undefined;
 let rival = {
     bet: function(x) { return nextRivalBet; },
+    roll: function(x) {},
     dice: [1,2,3,4,5]
 };
 

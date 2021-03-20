@@ -87,6 +87,7 @@ function rollInitialDice() {
     for (const x of Array(MAX_DICE).keys()) {
         game.playerDice[x] = rollDie();
     }
+    game.rival.roll(game);
     game.renderFun(game);
 };
 
