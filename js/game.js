@@ -59,10 +59,10 @@ var game = {
 };
 
 
-function dismiss() {
+function dismissAlert() {
     game.alert = undefined;
     game.renderFun(game);
-}
+};
 
 // Splash step
 function beginGame(newRenderFun, rival) {
@@ -71,6 +71,7 @@ function beginGame(newRenderFun, rival) {
     game.rival = rival;
     game.playerPoints = 0;
     game.rivalPoints = 0;
+    game.isPlayerStarting = true;
     game.renderFun(game);
 };
 
@@ -143,6 +144,9 @@ function startSubgame(subgame) {
         playerBestDice.forEach(x => game.selectedDiceKeys.add(x));
     }
     game.betsAreSet = game.lastAction != LastAction.NONE_YET;
+    if(!game.betsAreSet && !game.isPlayerStarting) {
+        rivalBet();
+    }
     game.renderFun(game);
 };
 
@@ -254,7 +258,7 @@ function nextRoundOrFinish() {
     if (isGameFinished()) {
         game.step = Steps.FINISH;
     } else {
-        //TODO: game.isPlayerStarting = !game.isPlayerStarting;
+        game.isPlayerStarting = !game.isPlayerStarting;
         rollInitialDice();
     }
 };
@@ -376,8 +380,10 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         betPass: betPass,
         betRaise: betRaise,
         determineWinner: determineWinner,
+        dismissAlert: dismissAlert,
         endRollingStep: endRollingStep,
         finishSubgame: finishSubgame,
+        nextResults: nextResults,
         rerollDice: rerollDice,
         rollInitialDice: rollInitialDice,
         startSubgame: startSubgame,

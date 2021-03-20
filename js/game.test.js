@@ -90,6 +90,10 @@ describe('on the bets step', () => {
         js.endRollingStep();
     });
 
+    test('the user starts talking', () => {
+        expect(js.game.isPlayerStarting).toBeTruthy();
+    });
+
     test('starts on the biggest subgame', () => {
         expect(js.game.subgame).toBe(js.Subgames.BIGGEST);
     });
@@ -126,9 +130,21 @@ describe('on the bets step', () => {
         });
     });
 
-    test('player can\'t raise zero', () => {
-        js.betRaise(0);
-        expect(js.game.playerBet).toBe(0);
+    describe('if player tries to raise zero', () => {
+        beforeEach(() => { js.betRaise(0); });
+
+        test('an alert is raised', () => {
+            expect(js.game.alert).not.toBeUndefined();
+        });
+
+        test('an alert can be dismissed', () => {
+            js.dismissAlert();
+            expect(js.game.alert).toBeUndefined();
+        });
+
+        test('their bet doesn\'t change', () => {
+            expect(js.game.playerBet).toBe(0);
+        });
     });
 
     describe('the player/rival', () => {
@@ -518,6 +534,109 @@ describe('on the bets step', () => {
 
             test('rival points don\'t increase', () => {
                 expect(js.game.rivalPoints).toBe(0);
+            });
+        });
+    });
+});
+
+describe('on the results step', () => {
+    beforeEach(() => {
+        nextRivalBet = js.Bets.PASS;
+        js.rollInitialDice();
+        js.game.playerDice = [5, 5, 5, 5, 5];
+        js.game.rival.dice = [6, 6, 6, 6, 6];
+        js.endRollingStep();
+        do {
+            js.finishSubgame();
+        } while (js.game.step == js.Steps.BETS);
+    });
+
+    test('step is properly set', () => {
+        expect(js.game.step).toBe(js.Steps.RESULTS);
+    });
+
+    test('starts on the biggest subgame', () => {
+        expect(js.game.subgame).toBe(js.Subgames.BIGGEST);
+    });
+
+    describe('if there are no pending bets', () => {
+        beforeEach(() => { js.nextResults(); });
+
+        test('continues to the smallest subgame', () => {
+            expect(js.game.subgame).toBe(js.Subgames.SMALLEST);
+        });
+
+        describe('after smallest subgame', () => {
+            beforeEach(() => { js.nextResults(); });
+
+            test('continues to the one-as-two subgame', () => {
+                expect(js.game.subgame).toBe(js.Subgames.ONE_AS_TWO);
+            });
+
+            describe('after one-as-two subgame', () => {
+                beforeEach(() => { js.nextResults(); });
+
+                test('continues to the pair-plus-ace subgame', () => {
+                    expect(js.game.subgame).toBe(js.Subgames.PAIR_PLUS_ACE);
+                });
+
+                describe('after one-as-two subgame', () => {
+                    beforeEach(() => { js.nextResults(); });
+
+                    test('goes back to the rolling step', () => {
+                        expect(js.game.step).toBe(js.Steps.ROLLING);
+                    });
+
+                    test('the starting player changes', () => {
+                        expect(js.game.isPlayerStarting).toBeFalsy();
+                    });
+
+                    test('and the rival will talk first next round', () => {
+                        nextRivalBet = 10;
+                        js.endRollingStep();
+                        expect(js.game.rivalBet).toBe(nextRivalBet);
+                    });
+                });
+            });
+        });
+    });
+
+    describe('if there are pending bets', () => {
+        let pendingPoints = 50;
+        beforeEach(() => {
+            js.game.pendingBets[js.Subgames.SMALLEST] = pendingPoints;
+        });
+
+        describe('the player might get them', () => {
+            beforeEach(() => {
+                do {
+                    js.nextResults();
+                } while (js.game.step == js.Steps.RESULTS);
+            });
+
+            test('and get the points', () => {
+                expect(js.game.playerPoints).toBe(pendingPoints);
+            });
+
+            test('and end the game', () => {
+                expect(js.game.step).toBe(js.Steps.FINISH);
+            });
+        });
+
+        describe('the rival might get them', () => {
+            beforeEach(() => {
+                js.game.rival.dice = [4, 4, 4, 4, 4];
+                do {
+                    js.nextResults();
+                } while (js.game.step == js.Steps.RESULTS);
+            });
+
+            test('and get the points', () => {
+                expect(js.game.rivalPoints).toBe(pendingPoints);
+            });
+
+            test('and end the game', () => {
+                expect(js.game.step).toBe(js.Steps.FINISH);
             });
         });
     });
