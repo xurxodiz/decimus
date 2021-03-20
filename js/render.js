@@ -1,5 +1,6 @@
 function begin() {
-    beginGame(render);
+    let rival = initializeAI();
+    beginGame(render, rival);
 };
 
 function render(what) {
@@ -43,6 +44,9 @@ function getCurrentBetText(lastAction) {
         case LastAction.RIVAL_CHECK: return "quedan a ver " + game.lastBetStanding;
         case LastAction.USER_FOLD: return "pasaches, levou " + game.lastBetStanding;
         case LastAction.RIVAL_FOLD: return "pasou, levaches " + game.lastBetStanding;
+        case LastAction.NO_GAME: return "non hai xogo";
+        case LastAction.USER_NO_GAME: return "non tes xogo, levou " + game.lastBetStanding;
+        case LastAction.RIVAL_NO_GAME: return "non ten xogo, levaches " + game.lastBetStanding;
     }
 }
 

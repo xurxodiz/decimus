@@ -6,7 +6,7 @@ Imaxes dos dados por Alice Design e tiradas do Noun Project.
 
 # Tests
 
-Os tests podense executar cos seguintes comandos, asumindo unha instalación de `npm`:
+Os tests pódense executar cos seguintes comandos, asumindo unha instalación de `npm`:
 
 ```
 npm install

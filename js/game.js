@@ -17,7 +17,10 @@ let LastAction = {
     USER_CHECK: 5,
     RIVAL_CHECK: 6,
     USER_FOLD: 7,
-    RIVAL_FOLD: 8
+    RIVAL_FOLD: 8,
+    NO_GAME: 9,
+    USER_NO_GAME: 10,
+    RIVAL_NO_GAME: 11
 }
 
 let Steps = {
@@ -111,10 +114,25 @@ function startSubgame(subgame) {
     game.selectedDiceKeys.clear();
     game.playerBet = 0;
     game.rivalBet = 0;
-    game.betsAreSet = false;
-    bestDice(subgame, game.playerDice).forEach(x =>
-        game.selectedDiceKeys.add(x)
-    );
+    let playerBestDice = bestDice(subgame, game.playerDice);
+    let rivalBestDice = bestDice(subgame, game.rival.dice);
+    if (playerBestDice.length == 0 && rivalBestDice.length == 0) {
+        game.lastAction = LastAction.NO_GAME;
+        game.lastBetStanding = 0;
+    } else if (playerBestDice.length == 0) {
+        game.lastAction = LastAction.USER_NO_GAME;
+        game.lastBetStanding = 1;
+        game.rivalPoints += 1;
+    } else if (rivalBestDice.length == 0) {
+        game.lastAction = LastAction.RIVAL_NO_GAME;
+        game.lastBetStanding = 1;
+        game.playerPoints += 1;
+    } else {
+        game.lastAction = LastAction.NONE_YET;
+        game.lastBetStanding = 0;
+        playerBestDice.forEach(x => game.selectedDiceKeys.add(x));
+    }
+    game.betsAreSet = game.lastAction != LastAction.NONE_YET;
     game.renderFun(game);
 };
 
@@ -165,7 +183,7 @@ function finishSubgame() {
 
 function rivalBet() {
     let action = game.rival.bet(game);
-    switch(action) {
+    switch (action) {
         case Bets.PASS: // note: only if user passed, otherwise it's folding!
             game.lastAction = LastAction.RIVAL_PASS;
             game.betsAreSet = true;
@@ -189,6 +207,11 @@ function rivalBet() {
             game.rivalBet = game.lastBetStanding;
     }
 };
+// Results step
+function showResults() {
+    game.step = Steps.RESULTS;
+    game.renderFun();
+};
 
 // Dice evaluation
 function bestDice(subgame, dice) {
@@ -197,7 +220,7 @@ function bestDice(subgame, dice) {
     });
     // ordered from biggest to smallest by value
     indexedDice.sort((a, b) => b.value - a.value);
-    switch(subgame) {
+    switch (subgame) {
         case Subgames.BIGGEST:
             return bestDiceBiggest(indexedDice);
         case Subgames.SMALLEST:
@@ -219,10 +242,10 @@ function bestDiceSmallest(dice) {
 
 function bestDiceOneAsTwo(dice) {
     // start from third smallest die and grow bigger
-    for (var i = MAX_DICE-3; i >= 0; i--) {
+    for (let i = MAX_DICE-3; i >= 0; i--) {
         // on each, go towards the smallest end adding pairs
-        for (var j = i+1; j < MAX_DICE; j++) {
-            for (var k = j+1; k < MAX_DICE; k++) {
+        for (let j = i+1; j < MAX_DICE; j++) {
+            for (let k = j+1; k < MAX_DICE; k++) {
                 if (dice[i].value == dice[j].value + dice[k].value) {
                     return [dice[i].index, dice[j].index, dice[k].index];
                 }
@@ -235,7 +258,7 @@ function bestDiceOneAsTwo(dice) {
 function bestDicePairPlusAce(dice) {
     // only proceed if there's at least one ace
     if (dice[dice.length-1].value == 1) {
-        for (var i = 0; i < MAX_DICE; i++) {
+        for (let i = 0; i < MAX_DICE; i++) {
             if (i == dice.length - 2) {
                 // we are about to compare something to the last ace
                 // and the last ace can't be part of the pair
@@ -249,30 +272,63 @@ function bestDicePairPlusAce(dice) {
     return [];
 };
 
-// Results step
-function showResults() {
-    game.step = Steps.RESULTS;
-    game.renderFun();
+function determineWinner(subgame, dice1, dice2) {
+    let bestDice1 = bestDice(subgame, dice1);
+    let bestDiceSum1 = bestDice1.reduce((acc, val) => acc + dice1[val], 0);
+    let bestDice2 = bestDice(subgame, dice2);
+    let bestDiceSum2 = bestDice2.reduce((acc, val) => acc + dice2[val], 0);
+    switch (subgame) {
+        case Subgames.BIGGEST:
+        case Subgames.PAIR_PLUS_ACE:
+            // Bigger = better
+            if (bestDiceSum1 == 0 && bestDiceSum2 == 0) {
+                // No game
+                return 0
+            } else if (bestDiceSum1 >= bestDiceSum2) {
+                // Ties go to first player
+                return 1;
+            } else {
+                return -1;
+            }
+        case Subgames.SMALLEST:
+        case Subgames.ONE_AS_TWO:
+            // Bigger = better
+            if (bestDiceSum1 == 0 && bestDiceSum2 == 0) {
+                // No game
+                return 0
+            } else if (bestDiceSum1 > 0 && bestDiceSum1 <= bestDiceSum2) {
+                // Ties go to first player
+                return 1;
+            } else {
+                return -1;
+            }
+    }
 };
 
 // Exports
-module.exports = {
-    // Enums
-    Bets: Bets,
-    Steps: Steps,
-    Subgames: Subgames,
-    // Objects
-    game: game,
-    // Functions
-    beginGame: beginGame,
-    bestDice: bestDice,
-    betCheck: betCheck,
-    betFold: betFold,
-    betPass: betPass,
-    betRaise: betRaise,
-    endRollingStep: endRollingStep,
-    finishSubgame: finishSubgame,
-    rerollDice: rerollDice,
-    rollInitialDice: rollInitialDice,
-    updateSelectedDie: updateSelectedDie
-};
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    // Don't export module for the browser
+    module.exports = {
+        // Enums
+        Bets: Bets,
+        LastAction: LastAction,
+        Steps: Steps,
+        Subgames: Subgames,
+        // Objects
+        game: game,
+        // Functions
+        beginGame: beginGame,
+        bestDice: bestDice,
+        betCheck: betCheck,
+        betFold: betFold,
+        betPass: betPass,
+        betRaise: betRaise,
+        determineWinner: determineWinner,
+        endRollingStep: endRollingStep,
+        finishSubgame: finishSubgame,
+        rerollDice: rerollDice,
+        rollInitialDice: rollInitialDice,
+        startSubgame: startSubgame,
+        updateSelectedDie: updateSelectedDie
+    };
+}
