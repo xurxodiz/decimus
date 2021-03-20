@@ -621,19 +621,26 @@ describe('determine winner', () => {
         test('dice1 wins', () => {
             let dice1 = [6, 6, 6, 6, 6];
             let dice2 = [1, 1, 1, 1, 1];
-            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2)).toBe(1);
+            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2, true)).toBe(1);
         });
 
         test('dice2 wins', () => {
             let dice1 = [5, 5, 6, 6, 5];
             let dice2 = [1, 1, 6, 6, 6];
-            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2)).toBe(-1);
+            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2, true)).toBe(-1);
         });
 
-        test('dice1 wins when tied', () => {
+        describe('when both tie', () => {
             let dice1 = [1, 1, 1, 1, 1];
             let dice2 = [1, 1, 1, 1, 1];
-            expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2)).toBe(1);
+
+            test('dice1 wins when talks', () => {
+                expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2, true)).toBe(1);
+            });
+
+            test('dice2 wins when talks', () => {
+                expect(js.determineWinner(js.Subgames.BIGGEST, dice1, dice2, false)).toBe(-1);
+            });
         });
     });
 
@@ -641,19 +648,26 @@ describe('determine winner', () => {
         test('dice1 wins', () => {
             let dice1 = [1, 1, 1, 6, 6];
             let dice2 = [2, 2, 2, 2, 2];
-            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2)).toBe(1);
+            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2, true)).toBe(1);
         });
 
         test('dice2 wins', () => {
             let dice1 = [5, 5, 6, 6, 5];
             let dice2 = [1, 1, 1, 6, 6];
-            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2)).toBe(-1);
+            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2, true)).toBe(-1);
         });
 
-        test('dice1 wins when tied', () => {
+        describe('when both tie', () => {
             let dice1 = [1, 1, 1, 1, 1];
             let dice2 = [1, 1, 1, 1, 1];
-            expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2)).toBe(1);
+
+            test('dice1 wins when talks', () => {
+                expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2, true)).toBe(1);
+            });
+
+            test('dice2 wins when talks', () => {
+                expect(js.determineWinner(js.Subgames.SMALLEST, dice1, dice2, false)).toBe(-1);
+            });
         });
     });
 
@@ -661,25 +675,34 @@ describe('determine winner', () => {
         test('dice1 wins', () => {
             let dice1 = [1, 1, 1, 2, 2];
             let dice2 = [2, 2, 4, 2, 2];
-            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(1);
+            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2, true)).toBe(1);
         });
 
         test('dice2 wins', () => {
             let dice1 = [5, 5, 6, 6, 5];
             let dice2 = [1, 2, 2, 4, 6];
-            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(-1);
+            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2, true)).toBe(-1);
         });
 
-        test('dice1 wins when tied when game', () => {
-            let dice1 = [1, 1, 1, 2, 1];
-            let dice2 = [1, 1, 2, 1, 1];
-            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(1);
-        });
+        describe('when both tie', () => {
+            describe('and there\'s game', () => {
+                let dice1 = [4, 4, 4, 2, 6];
+                let dice2 = [5, 5, 3, 3, 6];
 
-        test('both tie if there\'s no game', () => {
-            let dice1 = [4, 4, 4, 4, 6];
-            let dice2 = [5, 5, 3, 4, 5];
-            expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2)).toBe(0);
+                test('dice1 wins when talks', () => {
+                    expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2, true)).toBe(1);
+                });
+
+                test('dice2 wins when talks', () => {
+                    expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2, false)).toBe(-1);
+                });
+            });
+
+            test('and there\'s no game is a tie', () => {
+                let dice1 = [1, 1, 1, 1, 1];
+                let dice2 = [1, 1, 1, 1, 1];
+                expect(js.determineWinner(js.Subgames.ONE_AS_TWO, dice1, dice2, true)).toBe(0);
+            });
         });
     });
 
@@ -687,25 +710,34 @@ describe('determine winner', () => {
         test('dice1 wins', () => {
             let dice1 = [1, 1, 1, 2, 2];
             let dice2 = [2, 2, 4, 2, 2];
-            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(1);
+            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2, true)).toBe(1);
         });
 
         test('dice2 wins', () => {
             let dice1 = [1, 5, 2, 2, 5];
             let dice2 = [1, 6, 2, 4, 6];
-            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(-1);
+            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2, true)).toBe(-1);
         });
 
-        test('dice1 wins when tied when game', () => {
-            let dice1 = [1, 1, 1, 2, 1];
-            let dice2 = [1, 1, 2, 1, 1];
-            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(1);
-        });
+        describe('when both tie', () => {
+            describe('and there\'s game', () => {
+                let dice1 = [1, 1, 1, 2, 1];
+                let dice2 = [1, 1, 2, 1, 1];
 
-        test('both tie if there\'s no game', () => {
-            let dice1 = [4, 4, 3, 2, 6];
-            let dice2 = [1, 2, 3, 4, 5];
-            expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2)).toBe(0);
+                test('dice1 wins when talks', () => {
+                    expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2, true)).toBe(1);
+                });
+
+                test('dice2 wins when talks', () => {
+                    expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2, false)).toBe(-1);
+                });
+            });
+
+            test('and there\'s no game is a tie', () => {
+                let dice1 = [4, 4, 3, 2, 6];
+                let dice2 = [1, 2, 3, 4, 5];
+                expect(js.determineWinner(js.Subgames.PAIR_PLUS_ACE, dice1, dice2, true)).toBe(0);
+            });
         });
     });
 });

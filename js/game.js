@@ -27,7 +27,8 @@ let Steps = {
     SPLASH: "splash",
     ROLLING: "rolling",
     BETS: "bets",
-    RESULTS: "results"
+    RESULTS: "results",
+    FINISH: "finish",
 };
 
 let Subgames = {
@@ -43,6 +44,7 @@ var game = {
     playerDice: [],
     remainingRerolls: 0,
     selectedDiceKeys: new Set(),
+    playerStartsBets: true,
     playerBet: 0,
     rivalBet: 0,
     playerPoints: 0,
@@ -181,12 +183,11 @@ function betRaise(amount) {
 };
 
 function finishSubgame() {
-    // TODO: Add "reflection" step before going to the next part.
     let nextSubgame = game.subgame + 1;
     if (nextSubgame < Object.keys(Subgames).length) {
         startSubgame(nextSubgame);
     } else {
-        showResults();
+        startResults();
     }
 };
 
@@ -216,10 +217,46 @@ function rivalBet() {
             game.rivalBet = game.lastBetStanding;
     }
 };
+
 // Results step
-function showResults() {
+function startResults() {
     game.step = Steps.RESULTS;
-    game.renderFun();
+    calculateResults(Subgames.BIGGEST);
+};
+
+function calculateResults(subgame) {
+    game.subgame = subgame;
+    let pendingBet = game.pendingBets[subgame];
+    if (pendingBet) {
+        if (determineWinner(subgame, game.playerDice, game.rival.dice, game.playerStartsBets) == 1) {
+            game.playerPoints += pendingBet;
+        } else {
+            game.rivalPoints += pendingBet;
+        }
+    }
+    game.selectedDiceKeys.clear();
+    let playerBestDice = bestDice(subgame, game.playerDice);
+    playerBestDice.forEach(x => game.selectedDiceKeys.add(x));
+    game.renderFun(game);
+};
+
+function nextResults() {
+    let nextSubgame = game.subgame + 1;
+    if (nextSubgame < Object.keys(Subgames).length) {
+        calculateResults(nextSubgame);
+    } else {
+        // TODO: Add "reflection" step
+        nextRoundOrFinish();
+    }
+}
+
+function nextRoundOrFinish() {
+    if (game.playerPoints >= 30 || game.rivalPoints >= 30 && !(game.playerPoints == game.rivalPoints)) {
+        game.step = Steps.FINISH;
+    } else {
+        //TODO: game.playerStartsBets = !game.playerStartsBets;
+        rollInitialDice();
+    }
 };
 
 // Dice evaluation
@@ -281,7 +318,7 @@ function bestDicePairPlusAce(dice) {
     return [];
 };
 
-function determineWinner(subgame, dice1, dice2) {
+function determineWinner(subgame, dice1, dice2, firstPlayerWinsTies) {
     let bestDice1 = bestDice(subgame, dice1);
     let bestDiceSum1 = bestDice1.reduce((acc, val) => acc + dice1[val], 0);
     let bestDice2 = bestDice(subgame, dice2);
@@ -293,8 +330,9 @@ function determineWinner(subgame, dice1, dice2) {
             if (bestDiceSum1 == 0 && bestDiceSum2 == 0) {
                 // No game
                 return 0
-            } else if (bestDiceSum1 >= bestDiceSum2) {
-                // Ties go to first player
+            } else if (bestDiceSum1 == bestDiceSum2) {
+                return firstPlayerWinsTies ? 1 : -1;
+            } else if (bestDiceSum1 > bestDiceSum2) {
                 return 1;
             } else {
                 return -1;
@@ -305,8 +343,9 @@ function determineWinner(subgame, dice1, dice2) {
             if (bestDiceSum1 == 0 && bestDiceSum2 == 0) {
                 // No game
                 return 0
-            } else if (bestDiceSum1 > 0 && bestDiceSum1 <= bestDiceSum2) {
-                // Ties go to first player
+            } else if (bestDiceSum1 == bestDiceSum2) {
+                return firstPlayerWinsTies ? 1 : -1;
+            } else if (bestDiceSum1 > 0 && bestDiceSum1 < bestDiceSum2) {
                 return 1;
             } else {
                 return -1;
