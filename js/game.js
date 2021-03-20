@@ -52,8 +52,15 @@ var game = {
     lastAction: LastAction.NONE_YET,
     lastBetStanding: 0, // not strictly last bet raised, e.g. after fold, this is the points earned, not rejected
     renderFun: undefined,
-    rival: undefined
+    rival: undefined,
+    alert: undefined // used for alerts
 };
+
+
+function dismiss() {
+    game.alert = undefined;
+    game.renderFun(game);
+}
 
 // Splash step
 function beginGame(newRenderFun, rival) {
@@ -82,7 +89,8 @@ function rollInitialDice() {
 
 function rerollDice() {
     if (!game.selectedDiceKeys.size) {
-        game.renderFun("Escolle os dados para rolar");
+        game.alert = "Tes que escoller que dados volver a rolar!";
+        game.renderFun(game);
         return;
     }
 
@@ -161,7 +169,8 @@ function betPass() {
 
 function betRaise(amount) {
     if (amount < 1) {
-        game.renderFun("Ten que ser unha cantidade positiva");
+        game.alert = "Tes que apostar ou subir unha cantidade positiva!";
+        game.renderFun(game);
         return;
     }
     game.lastAction = LastAction.USER_RAISE;
