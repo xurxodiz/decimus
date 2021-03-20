@@ -12,6 +12,7 @@ function render(game) {
                 stepSplash: game.step == Steps.SPLASH,
                 stepBets: game.step == Steps.BETS,
                 stepRolling: game.step == Steps.ROLLING,
+                stepResults: game.step == Steps.RESULTS,
                 canReroll: game.remainingRerolls > 0,
                 isFirstBet: game.lastAction == LastAction.NONE_YET,
                 betsAreSet: game.betsAreSet,
@@ -24,6 +25,14 @@ function render(game) {
                 let selected = game.selectedDiceKeys.has(i);
                 return {key: i, value: x, selected: selected};
             });
+            if (game.step == Steps.RESULTS) {
+                let rivalDice = game.rival.dice;
+                let selectedRivalDice = new Set(bestDice(game.subgame, rivalDice));
+                gameToRender.rivalDice = rivalDice.map(function(x, i) {
+                    let selected = selectedRivalDice.has(i);
+                    return {key: i, value: x, selected: selected};
+                });
+            }
             let rendered = Mustache.render(template, gameToRender);
             $('#canvas').html(rendered);
         });
