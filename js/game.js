@@ -8,6 +8,18 @@ let Bets = {
     CHECK: -3
 };
 
+let LastAction = {
+    NONE_YET: 0,
+    USER_PASS: 1,
+    RIVAL_PASS: 2,
+    USER_RAISE: 3,
+    RIVAL_RAISE: 4,
+    USER_CHECK: 5,
+    RIVAL_CHECK: 6,
+    USER_FOLD: 7,
+    RIVAL_FOLD: 8
+}
+
 let Steps = {
     SPLASH: "splash",
     ROLLING: "rolling",
@@ -34,6 +46,8 @@ var game = {
     rivalPoints: 0,
     betsAreSet: false,
     pendingBets: {},
+    lastAction: LastAction.NONE_YET,
+    lastBetStanding: 0, // not strictly last bet raised, e.g. after fold, this is the points earned, not rejected
     renderFun: undefined,
     rival: undefined
 };
@@ -105,25 +119,36 @@ function startSubgame(subgame) {
 };
 
 function betCheck() {
-    game.playerBet = game.rivalBet;
-    game.pendingBets[game.subgame] = game.rivalBet;
+    game.lastAction = LastAction.USER_CHECK;
+    game.lastBetStanding = game.rivalBet;
+    game.playerBet = game.lastBetStanding;
+    game.pendingBets[game.subgame] = game.lastBetStanding;
     game.betsAreSet = true;
     game.renderFun(game);
 };
 
 function betFold() {
-    game.rivalPoints += Math.max(1, game.playerBet);
+    game.lastAction = LastAction.USER_FOLD;
+    game.lastBetStanding = Math.max(1, game.playerBet);
+    game.rivalPoints += game.lastBetStanding;
     game.betsAreSet = true;
     game.renderFun(game);
 };
 
 function betPass() {
+    game.lastAction = LastAction.USER_PASS;
     rivalBet();
     game.renderFun(game);
 };
 
 function betRaise(amount) {
-    game.playerBet = game.rivalBet + amount;
+    if (amount < 1) {
+        game.renderFun("Ten que ser unha cantidade positiva");
+        return;
+    }
+    game.lastAction = LastAction.USER_RAISE;
+    game.lastBetStanding = game.rivalBet + amount;
+    game.playerBet = game.lastBetStanding;
     rivalBet();
     game.renderFun(game);
 };
@@ -141,20 +166,27 @@ function finishSubgame() {
 function rivalBet() {
     let action = game.rival.bet(game);
     switch(action) {
-        case Bets.PASS:
+        case Bets.PASS: // note: only if user passed, otherwise it's folding!
+            game.lastAction = LastAction.RIVAL_PASS;
             game.betsAreSet = true;
             break;
         case Bets.FOLD:
-            game.playerPoints += Math.max(1, game.rivalBet);
+            game.lastAction = LastAction.RIVAL_FOLD;
+            game.lastBetStanding = Math.max(1, game.rivalBet);
+            game.playerPoints += game.lastBetStanding;
             game.betsAreSet = true;
             break;
         case Bets.CHECK:
-            game.rivalBet = game.playerBet;
-            game.pendingBets[game.subgame] = game.playerBet;
+            game.lastAction = LastAction.RIVAL_CHECK;
+            game.lastBetStanding = game.playerBet;
+            game.rivalBet = game.lastBetStanding;
+            game.pendingBets[game.subgame] = game.lastBetStanding;
             game.betsAreSet = true;
             break;
         default:
-            game.rivalBet = game.playerBet + action;
+            game.lastAction = LastAction.RIVAL_RAISE;
+            game.lastBetStanding = game.playerBet + action;
+            game.rivalBet = game.lastBetStanding;
     }
 };
 

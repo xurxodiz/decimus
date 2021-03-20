@@ -25,50 +25,23 @@ body {
 	justify-content: center;
 	align-items: center;
 	align-content: center;
+	flex-wrap: wrap;
 	width: 100%;
 	height: 100%;
-
-	&.splash {
-		#divDice {
-			display: none;
-		}
-	}
-
-	&.rolling {
-		#btnInitialThrow {
-			display: none;
-		}
-		.checkDie:checked + .labelDie {
-			border: 3px solid saddlebrown;
-		}
-	}
-
-	&.bets {
-		#btnInitialThrow {
-			display: none;
-		}
-		.checkDie:checked + .labelDie {
-			border: 3px dashed saddlebrown;
-		}
-	}
 }
 
-#btnInitialThrow {
-	height: 12.5%;
-	width: 30%;
+#explanation {
+	width: 100%;
+	margin: 10px 100px;
+	font-size: 1.5em;
 	background-color: wheat;
-	border: 3px solid saddlebrown;
-	font-size: 50px;
+	border: 1px solid white;
+	padding: 20px;
+	text-align: justify;
+	filter: drop-shadow(0 0 0.75rem wheat);
 }
 
 #divDice {
-	display: flex;
-	flex-wrap: wrap;
-	align-content: center;
-	justify-content: center;
-}
-
-#divDiceDice {
 	margin-bottom: 20px;
 	display: flex;
 	width: 100%;
@@ -79,6 +52,14 @@ body {
 
 		.checkDie {
 			display: none;
+
+			&:checked + .labelDie {
+				border-color: saddlebrown;
+			}
+
+			#game.bets &:checked + .labelDie {
+				border-style: dashed;
+			}
 		}
 
 		.labelDie {
@@ -95,6 +76,7 @@ body {
 				display: block;
 				background-size: 100%;
 				margin: auto;
+				filter: drop-shadow(0 0 1rem gainsboro);
 
 				&.face1 { background-image: url("assets/dice/one.png"); }
 				&.face2 { background-image: url("assets/dice/two.png"); }
@@ -107,18 +89,73 @@ body {
 	}
 }
 
-
-#divDiceButtons {
+#divButtons {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 
 	button {
-		height: 75px;
+		height: 80px;
 		width: 200px;
 		line-height: 75px;
-		font-size: 1.35rem;
-		background-color: wheat;
-		border: 2px solid saddlebrown;
+		font-size: 1.5rem;
+		background-color: darksalmon;
+		border: 4px solid saddlebrown;
 		margin: 10px;
+		border-radius: 20px;
+		cursor: pointer;
+		filter: drop-shadow(0 0 0.75rem saddlebrown);
+	}
+
+	#btnInitialThrow {
+		height: 100px;
+		background-color: darksalmon;
+		border: 3px solid saddlebrown;
+		font-size: 50px;
+	}
+
+	#currentBet {
+		width: 100%;
+		margin: 15px 200px;
+		font-size: 1.5em;
+		background-color: wheat;
+		border: 1px solid white;
+		padding: 10px;
+		text-align: center;
+		filter: drop-shadow(0 0 0.75rem wheat);
+	}
+
+	#betButtons {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 10px;
+
+		#btnBetRaise {
+			border-right: none;
+			margin-right: 0;
+			z-index: -1;
+		}
+
+		#inputBetRaise {
+			background-color: darksalmon;
+			padding: 10px;
+			margin: 10px;
+			font-size: 1.5em;
+			width: 50px;
+			/* neighbour button's 80px without padding (20px) and border (2x4px)
+			 * yeah for some reason border counts for input's height but not for button's
+			 */
+			height: 52px;
+			border: 4px solid saddlebrown;
+			filter: drop-shadow(0.5rem 0 1rem saddlebrown);
+			border-top-right-radius: 20px;
+			border-bottom-right-radius: 20px;
+
+			/* mount over btnBetRaise */
+			margin-left: -20px;
+			border-left: 1px solid saddlebrown;
+		}
 	}
 }
