@@ -121,8 +121,8 @@ function startSubgame(subgame) {
 function betCheck() {
     game.lastAction = LastAction.USER_CHECK;
     game.lastBetStanding = game.rivalBet;
-    // needed? game.playerBet = game.lastBetStanding;
-    game.pendingBets[game.subgame] = game.lastBet;
+    game.playerBet = game.lastBetStanding;
+    game.pendingBets[game.subgame] = game.lastBetStanding;
     game.betsAreSet = true;
     game.renderFun(game);
 };
