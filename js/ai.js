@@ -13,7 +13,6 @@ function rollFunction(game) {
     // AI rolls all dice N times and keeps the best dice
     // (this is different from the player rolling rules
     // but should give similar results).
-    console.log("Rolling");
     let bestChance = 0;
     let bestDice = [];
     let bestWinRate = [];
