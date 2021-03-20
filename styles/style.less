@@ -1,3 +1,23 @@
+/* variables */
+
+@color-bg-soft: wheat;
+@color-bg-hard: darksalmon;
+@color-border-soft: white;
+@color-border-hard: saddlebrown;
+@color-blur: gainsboro;
+
+/* fake selector for inheritance */
+
+.textbox {
+	font-size: 1.5em;
+	line-height: 1.5em;
+	border: 1px solid @color-border-soft;
+	background-color: @color-bg-soft;
+	filter: drop-shadow(0 0 0.75rem @color-border-soft);
+}
+
+/* element styling */
+
 * {
 	font-family: 'MedievalSharp', cursive;
 }
@@ -10,99 +30,6 @@ body {
 	height: 100vh;
 	margin: 0;
 	display: flex;
-}
-
-#alert {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background-color: wheat;
-	z-index: 9999;
-	font-size: 5em;
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	flex-direction: column;
-
-	p {
-		width: 80%;
-		max-width: 600px;
-		text-align: center;
-	}
-
-	button {
-		width: 50%;
-		max-width: 500px;
-		font-size: 1em;
-		height: 1.5em;
-		line-height: 1.5em;
-		background-color: darksalmon;
-		border: 4px solid saddlebrown;
-		border-radius: 20px;
-		cursor: pointer;
-		filter: drop-shadow(0 0 0.75rem saddlebrown);
-	}
-}
-
-#btnHelpOpen, #btnHelpClose {
-	position: absolute;
-	top: 0;
-	left: 0;
-	margin: 10px;
-	height: 55px;
-	width: 55px;
-	line-height: 50px;
-	font-size: 1.5em;
-	font-weight: bold;
-	background-color: darksalmon;
-	border: 4px solid saddlebrown;
-	border-radius: 20px;
-	cursor: pointer;
-	filter: drop-shadow(0 0 0.75rem saddlebrown);
-}
-
-#btnHelpClose {
-	filter: none;
-}
-
-#btnHelpCloseEnd {
-	background-color: darksalmon;
-	border: 4px solid saddlebrown;
-	border-radius: 20px;
-	cursor: pointer;
-	margin: 50px auto;
-	width: 150px;
-	display: block;
-	height: 60px;
-	line-height: 60px;
-	font-size: 1em;
-}
-
-#help {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	overflow-y: scroll;
-	background-color: wheat;
-	border: 1px solid white;
-	z-index: 9998; /* below #alert */
-	font-size: 1.5em;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-content: center;
-	display: none; /* starts hidden */
-
-	p {
-		margin: 5px 20px;
-		&:nth-child(2) { /* first p after the close button */
-			margin-top: 100px;
-		}
-	}
 }
 
 #canvas {
@@ -124,15 +51,93 @@ body {
 	height: 100%;
 }
 
+button {
+	cursor: pointer;
+	border-radius: 20px;
+	border: 4px solid @color-border-hard;
+	background-color: @color-bg-hard;
+	font-size: 1.5em;
+	filter: drop-shadow(0 0 0.75rem @color-border-hard);
+}
+
+#alert {
+	&:extend(.textbox);
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	font-size: 3em;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	p {
+		width: 80%;
+		max-width: 600px;
+		text-align: center;
+	}
+
+	button {
+		&:extend(button);
+		width: 50%;
+		max-width: 500px;
+		height: 1.5em;
+	}
+}
+
+#btnHelpOpen, #btnHelpClose {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 10px;
+	height: 55px;
+	width: 55px;
+	font-weight: bold;
+}
+
+/*#btnHelpClose {
+	filter: none;
+}*/
+
+#btnHelpCloseEnd {
+	margin: 50px auto;
+	width: 150px;
+	display: block;
+	height: 60px;
+	filter: none;
+}
+
+#help {
+	&:extend(.textbox);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	z-index: 9998; /* below #alert */
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+	display: none; /* starts hidden */
+
+	p {
+		margin: 5px 20px;
+		&:nth-child(2) { /* first p after the close button */
+			margin-top: 100px;
+		}
+	}
+}
+
 #explanation {
+	&:extend(.textbox);
 	width: 100%;
 	margin: 10px 100px;
-	font-size: 1.5em;
-	background-color: wheat;
-	border: 1px solid white;
 	padding: 20px;
 	text-align: justify;
-	filter: drop-shadow(0 0 0.75rem wheat);
 }
 
 #divDice, #divRivalDice {
@@ -148,7 +153,7 @@ body {
 			display: none;
 
 			&:checked + .labelDie {
-				border-color: saddlebrown;
+				border-color: @color-border-hard;
 			}
 
 			#game.bets &:checked + .labelDie {
@@ -170,7 +175,7 @@ body {
 				display: block;
 				background-size: 100%;
 				margin: auto;
-				filter: drop-shadow(0 0 1rem gainsboro);
+				filter: drop-shadow(0 0 1rem @color-blur);
 
 				&.face1 { background-image: url("assets/dice/one.png"); }
 				&.face2 { background-image: url("assets/dice/two.png"); }
@@ -191,32 +196,20 @@ body {
 	button {
 		height: 80px;
 		width: 200px;
-		line-height: 75px;
-		font-size: 1.5rem;
-		background-color: darksalmon;
-		border: 4px solid saddlebrown;
 		margin: 10px;
-		border-radius: 20px;
-		cursor: pointer;
-		filter: drop-shadow(0 0 0.75rem saddlebrown);
 	}
 
 	#btnInitialThrow {
 		height: 100px;
-		background-color: darksalmon;
-		border: 3px solid saddlebrown;
-		font-size: 50px;
+		font-size: 2.5em;
 	}
 
 	#currentBet {
+		&:extend(.textbox);
 		width: 100%;
-		margin: 15px 200px;
-		font-size: 1.5em;
-		background-color: wheat;
-		border: 1px solid white;
+		margin: 15px 175px;
 		padding: 10px;
 		text-align: center;
-		filter: drop-shadow(0 0 0.75rem wheat);
 	}
 
 	#betButtons {
@@ -227,28 +220,29 @@ body {
 		margin: 10px;
 
 		#btnBetRaise {
+			/* stick to #inputBetRaise: */
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
 			border-right: none;
 			margin-right: 0;
 		}
 
 		#inputBetRaise {
-			background-color: darksalmon;
 			padding: 10px;
 			margin: 10px;
-			font-size: 1.5em;
 			width: 50px;
-			/* neighbour button's 80px without padding (20px) and border (2x4px)
-			 * yeah for some reason border counts for input's height but not for button's
+			/* neighbour button's 80px without padding (20px) and border (2x4px):
+			 * (yeah for some reason border counts for input's height but not for button's)
 			 */
 			height: 52px;
-			border: 4px solid saddlebrown;
-			filter: drop-shadow(0.5rem 0 1rem saddlebrown);
-			border-top-right-radius: 20px;
-			border-bottom-right-radius: 20px;
-
-			/* mount over btnBetRaise */
+			/* it's an input but we want it to look like the buttons… except the cursor */
+			&:extend(button);
+			cursor: default;
+			/* mount over btnBetRaise: */
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
 			margin-left: -20px;
-			border-left: 1px solid saddlebrown;
+			border-left: 1px solid @color-border-hard;
 		}
 	}
 }
