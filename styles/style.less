@@ -12,6 +12,99 @@ body {
 	display: flex;
 }
 
+#alert {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: wheat;
+	z-index: 9999;
+	font-size: 5em;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	p {
+		width: 80%;
+		max-width: 600px;
+		text-align: center;
+	}
+
+	button {
+		width: 50%;
+		max-width: 500px;
+		font-size: 1em;
+		height: 1.5em;
+		line-height: 1.5em;
+		background-color: darksalmon;
+		border: 4px solid saddlebrown;
+		border-radius: 20px;
+		cursor: pointer;
+		filter: drop-shadow(0 0 0.75rem saddlebrown);
+	}
+}
+
+#btnHelpOpen, #btnHelpClose {
+	position: absolute;
+	top: 0;
+	left: 0;
+	margin: 10px;
+	height: 55px;
+	width: 55px;
+	line-height: 50px;
+	font-size: 1.5em;
+	font-weight: bold;
+	background-color: darksalmon;
+	border: 4px solid saddlebrown;
+	border-radius: 20px;
+	cursor: pointer;
+	filter: drop-shadow(0 0 0.75rem saddlebrown);
+}
+
+#btnHelpClose {
+	filter: none;
+}
+
+#btnHelpCloseEnd {
+	background-color: darksalmon;
+	border: 4px solid saddlebrown;
+	border-radius: 20px;
+	cursor: pointer;
+	margin: 50px auto;
+	width: 150px;
+	display: block;
+	height: 60px;
+	line-height: 60px;
+	font-size: 1em;
+}
+
+#help {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	background-color: wheat;
+	border: 1px solid white;
+	z-index: 9998; /* below #alert */
+	font-size: 1.5em;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+	display: none; /* starts hidden */
+
+	p {
+		margin: 5px 20px;
+		&:nth-child(2) { /* first p after the close button */
+			margin-top: 100px;
+		}
+	}
+}
+
 #canvas {
 	width: 800px;
 	height: 1200px;
@@ -21,6 +114,7 @@ body {
 }
 
 #game {
+	position: relative;
 	display: flex;
 	justify-content: center;
 	align-items: center;

@@ -3,12 +3,7 @@ function begin() {
     beginGame(render, rival);
 };
 
-function render(what) {
-    if (typeof(what) == "string") {
-        alert(what);
-        return;
-    }
-    let game = what;
+function render(game) {
     fetch('templates/game.mustache')
         .then((response) => response.text())
         .then((template) => {
@@ -22,7 +17,8 @@ function render(what) {
                 betsAreSet: game.betsAreSet,
                 currentBetText: getCurrentBetText(game.lastAction),
                 explanationText: getExplationText(game.step, game.subgame),
-                raiseText: getRaiseText(game.lastAction)
+                raiseText: getRaiseText(game.lastAction),
+                alert: game.alert
             };
             gameToRender.playerDice = game.playerDice.map(function(x, i) {
                 let selected = game.selectedDiceKeys.has(i);

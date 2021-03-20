@@ -1,5 +1,51 @@
 <div id="game" class="{{screen}}">
+    {{#alert}}
+        <div id="alert">
+            <p>{{alert}}</p>
+            <button id="btnDismiss" onClick="dismiss()">Entendido</button>
+        </div>
+    {{/alert}}
+
+    <button id="btnHelpOpen" onClick="$('#help').show()">?</button>
+    <div id="help">
+        <button id="btnHelpClose" onClick="$('#help').hide()">x</button>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <p>Esta é a nosa axuda, créditos e demáis.</p>
+        <button id="btnHelpCloseEnd" onClick="$('#help').hide()">Pechar</button>
+    </div>
+
     <div id="explanation">{{explanationText}}</div>
+
     <div id="divDice">
         {{#playerDice}}
             <span>
@@ -9,6 +55,7 @@
             </span>
         {{/playerDice}}
     </div>
+
     <div id="divButtons">
         {{#stepSplash}}
             <button id="btnInitialThrow" onClick="rollInitialDice()">Xogar</button>
@@ -30,8 +77,8 @@
                         <button id="btnBetFold" onClick="betFold()">Retirarse</button>
                         <button id="btnBetCheck" onClick="betCheck()">Ver</button>
                     {{/isFirstBet}}
-                    <button id="btnBetRaise" onClick="betRaise($('#inputBetRaise')[0].value)">{{raiseText}}</button>
-                    <input  id="inputBetRaise" type="number" value="0" min="0" max="10">
+                    <button id="btnBetRaise" onClick="betRaise(parseInt($('#inputBetRaise')[0].value))">{{raiseText}}</button>
+                    <input  id="inputBetRaise" type="number" value="1" min="1" max="10">
                 </div>
             {{/betsAreSet}}
             {{#betsAreSet}}

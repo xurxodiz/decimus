@@ -49,7 +49,7 @@ function betFunction(game) {
 
 function calculateWinRate(candidateDice) {
     let winRate = [];
-    for (let subgame = 0; subgame < Object.keys(Subgames).length; subgame++) {
+    $.each(Subgames, function(name, subgame) {
         let subgameWins = 0;
         for (let r = 0; r < SIMULATION_RUNS; r++) {
             let winner = determineWinner(subgame, rollDice(), candidateDice);
@@ -58,7 +58,7 @@ function calculateWinRate(candidateDice) {
             }
         }
         winRate[subgame] = subgameWins/SIMULATION_RUNS;
-    }
+    });
     return winRate;
 };
 
