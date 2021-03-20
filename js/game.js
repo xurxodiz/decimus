@@ -44,7 +44,7 @@ var game = {
     playerDice: [],
     remainingRerolls: 0,
     selectedDiceKeys: new Set(),
-    playerStartsBets: true,
+    isPlayerStarting: true,
     playerBet: 0,
     rivalBet: 0,
     playerPoints: 0,
@@ -228,7 +228,7 @@ function calculateResults(subgame) {
     game.subgame = subgame;
     let pendingBet = game.pendingBets[subgame];
     if (pendingBet) {
-        if (determineWinner(subgame, game.playerDice, game.rival.dice, game.playerStartsBets) == 1) {
+        if (determineWinner(subgame, game.playerDice, game.rival.dice, game.isPlayerStarting) == 1) {
             game.playerPoints += pendingBet;
         } else {
             game.rivalPoints += pendingBet;
@@ -251,12 +251,16 @@ function nextResults() {
 }
 
 function nextRoundOrFinish() {
-    if (game.playerPoints >= 30 || game.rivalPoints >= 30 && !(game.playerPoints == game.rivalPoints)) {
+    if (isGameFinished()) {
         game.step = Steps.FINISH;
     } else {
-        //TODO: game.playerStartsBets = !game.playerStartsBets;
+        //TODO: game.isPlayerStarting = !game.isPlayerStarting;
         rollInitialDice();
     }
+};
+
+function isGameFinished() {
+    return game.playerPoints >= 30 || game.rivalPoints >= 30 && !(game.playerPoints == game.rivalPoints);
 };
 
 // Dice evaluation
