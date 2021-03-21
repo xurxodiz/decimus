@@ -188,7 +188,6 @@ function betCheck() {
     game.playerBet = game.lastBetStanding;
     game.pendingBets[game.subgame] = game.lastBetStanding;
     game.betsAreSet = true;
-    game.isFirstBetOfRound = false;
     game.renderFun(game);
 };
 
@@ -197,7 +196,6 @@ function betFold() {
     game.lastBetStanding = Math.max(1, game.playerBet);
     game.rivalPoints += game.lastBetStanding;
     game.betsAreSet = true;
-    game.isFirstBetOfRound = false;
     game.renderFun(game);
 };
 
@@ -210,7 +208,6 @@ function betPass() {
         game.lastBetStanding = 1;
         game.pendingBets[game.subgame] = 1;
     }
-    game.isFirstBetOfRound = false;
     game.renderFun(game);
 };
 
