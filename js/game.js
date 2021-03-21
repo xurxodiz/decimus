@@ -74,7 +74,7 @@ var game = {
     renderFun: undefined,
     rival: undefined,
     alert: undefined, // used for alerts
-    userHasSilenced: false
+    userHasSilenced: true
 };
 
 

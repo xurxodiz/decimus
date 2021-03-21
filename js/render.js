@@ -15,7 +15,6 @@ function render(game) {
             });
         return;
     }
-    console.log("audio");
     let isFirstBet = game.lastAction == LastAction.NONE_YET ||
                         (game.lastAction == LastAction.RIVAL_PASS && !game.isPlayerStarting)
     let gameToRender = {
