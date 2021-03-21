@@ -2,6 +2,7 @@
 
 @color-bg-soft: wheat;
 @color-bg-hard: darksalmon;
+@color-border-player: black;
 @color-border-soft: white;
 @color-border-hard: saddlebrown;
 @color-blur: gainsboro;
@@ -180,6 +181,10 @@ button {
 	}
 }
 
+div#scoreboardPlayer {
+	border: 1px solid @color-border-player;
+}
+
 #playerDice, #rivalDice {
 	margin-bottom: 20px;
 	display: flex;
@@ -224,19 +229,22 @@ button {
 				&.face5 { background-image: url("assets/dice/five.png"); }
 				&.face6 { background-image: url("assets/dice/six.png"); }
 
+				&.rivalFace1 { background-image: url("assets/dice/r-one.png"); }
+				&.rivalFace2 { background-image: url("assets/dice/r-two.png"); }
+				&.rivalFace3 { background-image: url("assets/dice/r-three.png"); }
+				&.rivalFace4 { background-image: url("assets/dice/r-four.png"); }
+				&.rivalFace5 { background-image: url("assets/dice/r-five.png"); }
+				&.rivalFace6 { background-image: url("assets/dice/r-six.png"); }
+
 				&.rerolled {
 				  animation-name: rerolled;
 				  animation-duration: 100ms;
 				  animation-iteration-count: 2;
-				  animation-timing-function: linear; 
+				  animation-timing-function: linear;
 				}
 			}
 		}
 	}
-}
-
-#rivalDice {
-	opacity: 50%;
 }
 
 #divButtons {

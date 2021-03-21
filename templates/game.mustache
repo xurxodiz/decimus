@@ -15,13 +15,13 @@
 
     {{^stepSplash}}
         <div id="scoreboard">
-            <div id="scoreboardPlayer">
-                <span id="playerScoreName">{{text.playerScoreName}}</span>
-                <span id="playerScorePoints">{{playerScorePoints}}</span>
-            </div>
             <div id="scoreboardRival">
                 <span id="rivalScoreName">{{text.rivalScoreName}}</span>
                 <span id="rivalScorePoints">{{rivalScorePoints}}</span>
+            </div>
+            <div id="scoreboardPlayer">
+                <span id="playerScoreName">{{text.playerScoreName}}</span>
+                <span id="playerScorePoints">{{playerScorePoints}}</span>
             </div>
         </div>
     {{/stepSplash}}
@@ -32,7 +32,7 @@
         {{#rivalDice}}
             <span>
                 <input id="inputRivalDie{{key}}" type="checkbox" value="rivalDie{{key}}" class="checkDie" {{#selected}}checked{{/selected}}/>
-                <label id="rivalDie{{key}}" for="inputRivalDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
+                <label id="rivalDie{{key}}" for="inputRivalDie{{key}}" class="labelDie"><i class="rivalFace{{value}}"></i></label>
             </span>
         {{/rivalDice}}
     </div>
