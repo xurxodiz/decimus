@@ -1,6 +1,7 @@
 const MAX_DICE = 5;
 const MAX_REROLLS = 2;
 const SUBGAME_DICE = 3;
+const WIN_POINTS = 30;
 
 let Alerts = {
     NO_DICE_TO_REROLL: -1,
@@ -222,21 +223,26 @@ function finishSubgame() {
 function rivalBet() {
     let action = game.rival.bet(game);
     switch (action) {
-        case Bets.FOLD:
         case Bets.PASS:
-            // AI does not currently return PASS, it's collapsed with FOLD
-            // so we need to tell it apart from context
-            game.lastAction = (LastAction.USER_PASS)? LastAction.RIVAL_PASS : LastAction.RIVAL_FOLD;
+            game.lastAction = LastAction.RIVAL_PASS;
+            if (game.isPlayerStarting || game.playerBet > 0) {
+                game.betsAreSet = true;
+            }
+            break;
+        case Bets.FOLD:
+            game.lastAction = LastAction.RIVAL_FOLD;
             game.lastBetStanding = Math.max(1, game.rivalBet);
             game.playerPoints += game.lastBetStanding;
             game.betsAreSet = true;
             break;
         case Bets.CHECK:
             game.lastAction = LastAction.RIVAL_CHECK;
-            game.lastBetStanding = game.playerBet;
-            game.rivalBet = game.lastBetStanding;
-            game.pendingBets[game.subgame] = game.lastBetStanding;
-            game.betsAreSet = true;
+            if (game.isPlayerStarting || game.playerBet > 0) {
+                game.lastBetStanding = game.playerBet;
+                game.rivalBet = game.lastBetStanding;
+                game.pendingBets[game.subgame] = game.lastBetStanding;
+                game.betsAreSet = true;
+            }
             break;
         default:
             game.lastAction = LastAction.RIVAL_RAISE;
@@ -300,7 +306,8 @@ function nextRound() {
 }
 
 function isGameFinished() {
-    return game.playerPoints >= 30 || game.rivalPoints >= 30 && !(game.playerPoints == game.rivalPoints);
+    return game.playerPoints >= WIN_POINTS || game.rivalPoints >= WIN_POINTS
+            && !(game.playerPoints == game.rivalPoints);
 };
 
 // Dice evaluation
