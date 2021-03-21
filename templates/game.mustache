@@ -13,12 +13,10 @@
         <button id="btnHelpCloseEnd" onClick="$('#help').hide()">{{text.helpCloseEndButton}}</button>
     </div>
 
-    {{^stepSplash}}
-        <button id="btnToggleAudio" onClick="toggleAudio()" {{#userHasSilenced}}class="paused"{{/userHasSilenced}}>
+    <button id="btnToggleAudio" onClick="toggleAudio()" {{#userHasSilenced}}class="paused"{{/userHasSilenced}}>
         {{^userHasSilenced}}{{text.audioPlayingButton}}{{/userHasSilenced}}
         {{#userHasSilenced}}{{text.audioPausedButton}}{{/userHasSilenced}}
     </button>
-    {{/stepSplash}}
 
     {{^stepSplash}}
         <div id="scoreboard">
