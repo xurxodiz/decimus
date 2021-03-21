@@ -2,11 +2,11 @@
 
 @color-bg-soft: wheat;
 @color-bg-hard: darksalmon;
-@color-bg-accent: thistle;
+@color-bg-accent: lightblue;
 @color-border-player: black;
 @color-border-soft: white;
 @color-border-hard: saddlebrown;
-@color-border-accent: mediumpurple;
+@color-border-accent: cornflowerblue;
 @color-blur: gainsboro;
 
 /* fake selector for inheritance */
@@ -234,7 +234,7 @@ button {
 
 			&:checked + .labelDie {
 				border-color: @color-border-hard;
-				border-style: dashed;
+				border-style: dotted;
 			}
 
 			#game.rolling &:checked + .labelDie {
@@ -338,11 +338,20 @@ button {
 
 @media screen and (min-width: 1200px) {
 	/* in big screens, we reduce default text size and button size but increase button text size */
-	html {
-		font-size: 8pt;
-	}
-	#divButtons button, #divButtons #btnInitialThrow {
-		font-size: 3em;
-		width: 300px;
-	}
+	html { font-size: 8pt;}
+	#divButtons button, #divButtons #btnInitialThrow { font-size: 3em; width: 300px; }
+}
+
+
+@media screen and (max-height: 800px) {
+	/* reduce all sizes for small screens */
+	html { font-size: 8pt; }
+	#scoreboard { max-height: 20%; }
+	#explanation, #info { max-height: 15%; }
+	#playerDice, #rivalDice { max-height: 15%; }
+	#playerDice span .labelDie { max-width: 75px; max-height: 75px; i { max-width: 50px; max-height: 50px; } }
+	#rivalDice span .labelDie { max-width: 75px; max-height: 75px; i { max-width: 50px; max-height: 50px; } }
+	#divButtons { max-height: 10%; }
+	#divButtons button { max-height: 75px; }
+	#divButtons #betButtons #inputBetRaise { max-height: 43px; }
 }
