@@ -918,3 +918,19 @@ describe('determine winner', () => {
         });
     });
 });
+
+describe('game can be restarted', () => {
+    beforeEach(() => {
+        js.game.playerPoints = 32;
+        js.game.rivalPoints = 27;
+        js.playAgain();
+    });
+
+    test('and player points are resetted', () => {
+        expect(js.game.playerPoints).toBe(0);
+    });
+
+    test('and rival points are resetted', () => {
+        expect(js.game.rivalPoints).toBe(0);
+    });
+});
