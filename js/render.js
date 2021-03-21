@@ -13,13 +13,20 @@ function render(game) {
                 stepBets: game.step == Steps.BETS,
                 stepRolling: game.step == Steps.ROLLING,
                 stepResults: game.step == Steps.RESULTS,
+                stepEndOfRound: game.step == Steps.END_OF_ROUND,
+                stepFinish: game.step == Steps.FINISH,
+                playerScorePoints: game.playerPoints,
+                rivalScorePoints: game.rivalPoints,
                 canReroll: game.remainingRerolls > 0,
                 isFirstBet: game.lastAction == LastAction.NONE_YET,
                 betsAreSet: game.betsAreSet,
-                currentBetText: getCurrentBetText(game.lastAction),
-                explanationText: getExplationText(game.step, game.subgame),
-                raiseText: getRaiseText(game.lastAction),
-                alert: game.alert
+                text: {...TEXT,
+                    calcCurrentBetDesc: getCurrentBetText(game.lastAction, game.isFirstBetOfRound),
+                    calcExplanationBox: getExplanationText(game.step, game.subgame),
+                    calcRaiseButton: getRaiseButtonText(game.lastAction),
+                    calcFinishResolution: getFinishText(game.playerPoints, game.rivalPoints),
+                    calcAlertPop: getAlertText(game.alert)
+                }
             };
             gameToRender.playerDice = game.playerDice.map(function(x, i) {
                 let selected = game.selectedDiceKeys.has(i);
@@ -39,38 +46,70 @@ function render(game) {
         });
 };
 
-function getCurrentBetText(lastAction) {
+function getCurrentBetText(lastAction, isFirstBetOfRound) {
     switch (lastAction) {
-        case LastAction.NONE_YET: return "tócache apostar";
-        case LastAction.USER_PASS: return "pasaches, levou " + game.lastBetStanding;
-        case LastAction.RIVAL_PASS: return "pasou, levaches " + game.lastBetStanding;
-        case LastAction.USER_RAISE: return "subiches a " + game.lastBetStanding;
-        case LastAction.RIVAL_RAISE: return "subiuche a " + game.lastBetStanding;
-        case LastAction.USER_CHECK: return "quedan a ver " + game.lastBetStanding;
-        case LastAction.RIVAL_CHECK: return "quedan a ver " + game.lastBetStanding;
-        case LastAction.USER_FOLD: return "pasaches, levou " + game.lastBetStanding;
-        case LastAction.RIVAL_FOLD: return "pasou, levaches " + game.lastBetStanding;
-        case LastAction.NO_GAME: return "non hai xogo";
-        case LastAction.USER_NO_GAME: return "non tes xogo, levou " + game.lastBetStanding;
-        case LastAction.RIVAL_NO_GAME: return "non ten xogo, levaches " + game.lastBetStanding;
+        case LastAction.NONE_YET: return TEXT.currentBetNoneYet;
+        case LastAction.USER_PASS: return $.validator.format(TEXT.currentBetUserPass, [game.lastBetStanding]);
+        case LastAction.RIVAL_PASS: return $.validator.format(TEXT.currentBetRivalPass, [game.lastBetStanding]);
+        case LastAction.USER_RAISE: return $.validator.format(TEXT.currentBetUserRaise, [game.lastBetStanding]);
+        case LastAction.RIVAL_RAISE: return $.validator.format(TEXT.currentBetRivalRaise,
+            [((isFirstBetOfRound)? TEXT.currentBetRivalRaiseBet : TEXT.currentBetRivalRaiseRaise),
+             game.lastBetStanding]);
+        case LastAction.USER_CHECK: return $.validator.format(TEXT.currentBetUserCheck, [game.lastBetStanding]);
+        case LastAction.RIVAL_CHECK: return $.validator.format(TEXT.currentBetRivalCheck, [game.lastBetStanding]);
+        case LastAction.USER_FOLD: return $.validator.format(TEXT.currentBetUserFold, [game.lastBetStanding]);
+        case LastAction.RIVAL_FOLD: return $.validator.format(TEXT.currentBetRivalFold, [game.lastBetStanding]);
+        case LastAction.NO_GAME: return TEXT.currentBetNoGame;
+        case LastAction.USER_NO_GAME: return $.validator.format(TEXT.currentBetUserNoGame, [game.lastBetStanding]);
+        case LastAction.RIVAL_NO_GAME: return $.validator.format(TEXT.currentBetRivalNoGame, [game.lastBetStanding]);
+        case LastAction.USER_WON_CHECK: return $.validator.format(TEXT.currentBetUserWonCheck, [game.lastBetStanding]);
+        case LastAction.RIVAL_WON_CHECK: return $.validator.format(TEXT.currentBetRivalWonCheck, [game.lastBetStanding]);
+        case LastAction.ALREADY_ASSIGNED: return TEXT.currentBetAlreadyAssigned;
     }
 }
 
-function getRaiseText(lastAction) {
-    return (lastAction == LastAction.NONE_YET)? "Apostar" : "Subir";
+function subgameToText(subgame) {
+    switch (subgame) {
+        case Subgames.BIGGEST: return TEXT.subgameBiggest;
+        case Subgames.SMALLEST: return TEXT.subgameSmallest;
+        case Subgames.ONE_AS_TWO: return TEXT.subgameOneAsTwo;
+        case Subgames.PAIR_PLUS_ACE: return TEXT.subgamePairPlusAce;
+    }
 }
 
-function getExplationText(step, subgame) {
+function getRaiseButtonText(lastAction) {
+    return (lastAction == LastAction.NONE_YET)? TEXT.betButton : TEXT.raiseButton;
+}
+
+function getExplanationText(step, subgame) {
     switch (step) {
-        case Steps.SPLASH: return "Dámosche a benvida a DECIMUS, o xogo de dados retromedieval!";
-        case Steps.ROLLING: return "Tes dúas oportunidades de rolar de novo tantos dados como queiras.";
+        case Steps.SPLASH: return TEXT.explanationSplash;
+        case Steps.ROLLING: return TEXT.explanationRolling;
         case Steps.BETS:
             switch (subgame) {
-                case Subgames.BIGGEST: return "En MAIORES contan os dados con maior valor.";
-                case Subgames.SMALLEST: return "En MENORES contan os dados con menor valor.";
-                case Subgames.ONE_AS_TWO: return "En TANTO EN UN COMO EN DOUS conta ter os dados máis pequenos tal que dous sumen o do outro.";
-                case Subgames.PAIR_PLUS_ACE: return "En PAR E AS conta a maior parella acompañada de as que teñas.";
+                case Subgames.BIGGEST: return TEXT.explanationBiggest;
+                case Subgames.SMALLEST: return TEXT.explanationSmallest;
+                case Subgames.ONE_AS_TWO: return TEXT.explanationOneAsTwo;
+                case Subgames.PAIR_PLUS_ACE: return TEXT.explanationPairPlusAce;
             }
-        case Steps.RESULTS: return "Velaquí o resultado das túas apostas.";
+        case Steps.RESULTS: return $.validator.format(TEXT.explanationResults, [subgameToText(subgame)]);
+        case Steps.END_OF_ROUND: return TEXT.explanationEndOfRound;
+        case Steps.FINISH: return TEXT.explanationFinish;
+    }
+}
+
+function getFinishText(playerPoints, rivalPoints) {
+    switch (Math.sign(playerPoints-rivalPoints)) {
+        case  1: return TEXT.playerWon;
+        case  0: return TEXT.tie;
+        case -1: return TEXT.rivalWon
+    }
+}
+
+function getAlertText(alert) {
+    switch (alert) {
+        case Alerts.NO_DICE_TO_REROLL: return TEXT.alertNoDiceToReroll;
+        case Alerts.NON_POSITIVE_BET: return TEXT.nonPositiveBet;
+        default: return "";
     }
 }

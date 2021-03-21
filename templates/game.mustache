@@ -1,52 +1,42 @@
 <div id="game" class="{{screen}}">
-    {{#alert}}
+    {{#text.calcAlertPop}}
         <div id="alert">
-            <p>{{alert}}</p>
-            <button id="btnDismiss" onClick="dismissAlert()">Entendido</button>
+            <p>{{text.calcAlertPop}}</p>
+            <button id="btnDismiss" onClick="dismissAlert()">{{text.dismissAlertButton}}</button>
         </div>
-    {{/alert}}
+    {{/text.calcAlertPop}}
 
-    <button id="btnHelpOpen" onClick="$('#help').show()">?</button>
+    <button id="btnHelpOpen" onClick="$('#help').show()">{{text.helpButton}}</button>
     <div id="help">
-        <button id="btnHelpClose" onClick="$('#help').hide()">x</button>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <p>Esta é a nosa axuda, créditos e demáis.</p>
-        <button id="btnHelpCloseEnd" onClick="$('#help').hide()">Pechar</button>
+        <button id="btnHelpClose" onClick="$('#help').hide()">{{text.helpCloseButton}}</button>
+        {{{text.helpAndCredits}}}
+        <button id="btnHelpCloseEnd" onClick="$('#help').hide()">{{text.helpCloseEndButton}}</button>
     </div>
 
-    <div id="explanation">{{explanationText}}</div>
+    {{^stepSplash}}
+        <div id="scoreboard">
+            <div id="scoreboardPlayer">
+                <span id="playerScoreName">{{text.playerScoreName}}</span>
+                <span id="playerScorePoints">{{playerScorePoints}}</span>
+            </div>
+            <div id="scoreboardRival">
+                <span id="rivalScoreName">{{text.rivalScoreName}}</span>
+                <span id="rivalScorePoints">{{rivalScorePoints}}</span>
+            </div>
+        </div>
+    {{/stepSplash}}
 
-    <div id="divDice">
+    <div id="explanation">{{{text.calcExplanationBox}}}</div>
+
+    <div id="rivalDice">
+        {{#rivalDice}}
+            <span>
+                <input id="inputRivalDie{{key}}" type="checkbox" value="rivalDie{{key}}" class="checkDie" {{#selected}}checked{{/selected}}/>
+                <label id="rivalDie{{key}}" for="inputRivalDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
+            </span>
+        {{/rivalDice}}
+    </div>
+    <div id="playerDice">
         {{#playerDice}}
             <span>
                 <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
@@ -55,45 +45,45 @@
             </span>
         {{/playerDice}}
     </div>
-    <div id="divRivalDice">
-        {{#rivalDice}}
-            <span>
-                <input id="inputRivalDie{{key}}" type="checkbox" value="rivalDie{{key}}" class="checkDie" {{#selected}}checked{{/selected}}/>
-                <label id="rivalDie{{key}}" for="inputRivalDie{{key}}" class="labelDie"><i class="face{{value}}"></i></label>
-            </span>
-        {{/rivalDice}}
-    </div>
     <div id="divButtons">
         {{#stepSplash}}
-            <button id="btnInitialThrow" onClick="rollInitialDice()">Xogar</button>
+            <button id="btnInitialThrow" onClick="rollInitialDice()">{{text.initialButton}}</button>
         {{/stepSplash}}
         {{#stepRolling}}
             {{#canReroll}}
-                <button id="btnReroll" onclick="rerollDice()" data-times="0">Rolar de novo</button>
+                <button id="btnReroll" onclick="rerollDice()" data-times="0">{{text.rerollButton}}</button>
             {{/canReroll}}
-            <button id="btnEndRolls" onclick="endRollingStep()">Conforme</button>
+            <button id="btnEndRolls" onclick="endRollingStep()">{{text.endRollsButton}}</button>
         {{/stepRolling}}
+        {{#text.calcCurrentBetDesc}}
+            <div id="currentBet">{{text.calcCurrentBetDesc}}</div>
+        {{/text.calcCurrentBetDesc}}
         {{#stepBets}}
-            <div id="currentBet">Aposta actual: {{currentBetText}}</div>
             {{^betsAreSet}}
                 <div id="betButtons">
                     {{#isFirstBet}}
-                        <button id="btnBetPass" onClick="betPass()">Pasar</button>
+                        <button id="btnBetPass" onClick="betPass()">{{text.passButton}}</button>
                     {{/isFirstBet}}
                     {{^isFirstBet}}
-                        <button id="btnBetFold" onClick="betFold()">Retirarse</button>
-                        <button id="btnBetCheck" onClick="betCheck()">Ver</button>
+                        <button id="btnBetFold" onClick="betFold()">{{text.foldButton}}</button>
+                        <button id="btnBetCheck" onClick="betCheck()">{{text.checkButton}}</button>
                     {{/isFirstBet}}
-                    <button id="btnBetRaise" onClick="betRaise(parseInt($('#inputBetRaise')[0].value))">{{raiseText}}</button>
+                    <button id="btnBetRaise" onClick="betRaise(parseInt($('#inputBetRaise')[0].value))">{{text.calcRaiseButton}}</button>
                     <input  id="inputBetRaise" type="number" value="1" min="1" max="10">
                 </div>
             {{/betsAreSet}}
             {{#betsAreSet}}
-                <button id="btnFinishSubgame" onClick="finishSubgame()">Continuar</button>
+                <button id="btnFinishSubgame" onClick="finishSubgame()">{{text.finishSubgameButton}}</button>
             {{/betsAreSet}}
         {{/stepBets}}
         {{#stepResults}}
-            <button id="btnFinishSubgame" onClick="nextResults()">Continuar</button>
+            <button id="btnNextResults" onClick="nextResults()">{{text.nextResultsButton}}</button>
         {{/stepResults}}
+        {{#stepEndOfRound}}
+            <button id="btnEndOfRound" onClick="nextRound()">{{text.nextRoundButton}}</button>
+        {{/stepEndOfRound}}
+        {{#stepFinish}}
+            <div id="finish">{{text.calcFinishResolution}}</div>
+        {{/stepFinish}}
     </div>
 </div>

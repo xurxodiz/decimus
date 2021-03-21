@@ -584,18 +584,22 @@ describe('on the results step', () => {
                 describe('after one-as-two subgame', () => {
                     beforeEach(() => { js.nextResults(); });
 
-                    test('goes back to the rolling step', () => {
-                        expect(js.game.step).toBe(js.Steps.ROLLING);
+                    test('goes to end of round step', () => {
+                        expect(js.game.step).toBe(js.Steps.END_OF_ROUND);
                     });
 
-                    test('the starting player changes', () => {
-                        expect(js.game.isPlayerStarting).toBeFalsy();
-                    });
+                    describe('and the next round', () => {
+                        beforeEach(() => { js.nextRound(); });
 
-                    test('and the rival will talk first next round', () => {
-                        nextRivalBet = 10;
-                        js.endRollingStep();
-                        expect(js.game.rivalBet).toBe(nextRivalBet);
+                        test('the starting player changes', () => {
+                            expect(js.game.isPlayerStarting).toBeFalsy();
+                        });
+
+                        test('and the rival will talk first next round', () => {
+                            nextRivalBet = 10;
+                            js.endRollingStep();
+                            expect(js.game.rivalBet).toBe(nextRivalBet);
+                        });
                     });
                 });
             });

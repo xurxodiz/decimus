@@ -2,6 +2,11 @@ const MAX_DICE = 5;
 const MAX_REROLLS = 2;
 const SUBGAME_DICE = 3;
 
+let Alerts = {
+    NO_DICE_TO_REROLL: -1,
+    NON_POSITIVE_BET: -2
+};
+
 let Bets = {
     PASS: -1,
     FOLD: -2,
@@ -20,7 +25,10 @@ let LastAction = {
     RIVAL_FOLD: 8,
     NO_GAME: 9,
     USER_NO_GAME: 10,
-    RIVAL_NO_GAME: 11
+    RIVAL_NO_GAME: 11,
+    USER_WON_CHECK: 12, // these three are resolutions for when displaying results
+    RIVAL_WON_CHECK: 13,
+    ALREADY_ASSIGNED: 14
 }
 
 let Steps = {
@@ -28,6 +36,7 @@ let Steps = {
     ROLLING: "rolling",
     BETS: "bets",
     RESULTS: "results",
+    END_OF_ROUND: "endOfRound",
     FINISH: "finish",
 };
 
@@ -52,8 +61,9 @@ var game = {
     rivalPoints: 0,
     betsAreSet: false,
     pendingBets: {},
-    lastAction: LastAction.NONE_YET,
+    lastAction: undefined,
     lastBetStanding: 0, // not strictly last bet raised, e.g. after fold, this is the points earned, not rejected
+    isFirstBetOfRound: true,
     renderFun: undefined,
     rival: undefined,
     alert: undefined // used for alerts
@@ -73,6 +83,7 @@ function beginGame(newRenderFun, rival) {
     game.playerPoints = 0;
     game.rivalPoints = 0;
     game.isPlayerStarting = true;
+    game.lastAction = undefined;
     game.renderFun(game);
 };
 
@@ -92,11 +103,12 @@ function rollInitialDice() {
     }
     game.rival.roll(game);
     game.renderFun(game);
+    game.justRerolled.clear();
 };
 
 function rerollDice() {
     if (!game.selectedDiceKeys.size) {
-        game.alert = "Tes que escoller que dados volver a rolar!";
+        game.alert = Alerts.NO_DICE_TO_REROLL;
         game.renderFun(game);
         return;
     }
@@ -131,6 +143,8 @@ function startSubgame(subgame) {
     game.selectedDiceKeys.clear();
     game.playerBet = 0;
     game.rivalBet = 0;
+    game.lastAction = LastAction.NONE_YET;
+    game.isFirstBetOfRound = true;
     let playerBestDice = bestDice(subgame, game.playerDice);
     let rivalBestDice = bestDice(subgame, game.rival.dice);
     if (playerBestDice.length == 0 && rivalBestDice.length == 0) {
@@ -162,6 +176,7 @@ function betCheck() {
     game.playerBet = game.lastBetStanding;
     game.pendingBets[game.subgame] = game.lastBetStanding;
     game.betsAreSet = true;
+    game.isFirstBetOfRound = false;
     game.renderFun(game);
 };
 
@@ -170,24 +185,27 @@ function betFold() {
     game.lastBetStanding = Math.max(1, game.playerBet);
     game.rivalPoints += game.lastBetStanding;
     game.betsAreSet = true;
+    game.isFirstBetOfRound = false;
     game.renderFun(game);
 };
 
 function betPass() {
     game.lastAction = LastAction.USER_PASS;
+    game.isFirstBetOfRound = false;
     rivalBet();
     game.renderFun(game);
 };
 
 function betRaise(amount) {
     if (amount < 1) {
-        game.alert = "Tes que apostar ou subir unha cantidade positiva!";
+        game.alert = Alerts.NON_POSITIVE_BET;
         game.renderFun(game);
         return;
     }
     game.lastAction = LastAction.USER_RAISE;
     game.lastBetStanding = game.rivalBet + amount;
     game.playerBet = game.lastBetStanding;
+    game.isFirstBetOfRound = false;
     rivalBet();
     game.renderFun(game);
 };
@@ -204,12 +222,11 @@ function finishSubgame() {
 function rivalBet() {
     let action = game.rival.bet(game);
     switch (action) {
-        case Bets.PASS: // note: only if user passed, otherwise it's folding!
-            game.lastAction = LastAction.RIVAL_PASS;
-            game.betsAreSet = true;
-            break;
         case Bets.FOLD:
-            game.lastAction = LastAction.RIVAL_FOLD;
+        case Bets.PASS:
+            // AI does not currently return PASS, it's collapsed with FOLD
+            // so we need to tell it apart from context
+            game.lastAction = (LastAction.USER_PASS)? LastAction.RIVAL_PASS : LastAction.RIVAL_FOLD;
             game.lastBetStanding = Math.max(1, game.rivalBet);
             game.playerPoints += game.lastBetStanding;
             game.betsAreSet = true;
@@ -239,10 +256,16 @@ function calculateResults(subgame) {
     let pendingBet = game.pendingBets[subgame];
     if (pendingBet) {
         if (determineWinner(subgame, game.playerDice, game.rival.dice, game.isPlayerStarting) == 1) {
-            game.playerPoints += pendingBet;
+            game.lastAction = LastAction.USER_WON_CHECK;
+            game.lastBetStanding = pendingBet;
+            game.playerPoints += game.lastBetStanding;
         } else {
-            game.rivalPoints += pendingBet;
+            game.lastAction = LastAction.RIVAL_WON_CHECK;
+            game.lastBetStanding = pendingBet;
+            game.rivalPoints += game.lastBetStanding;
         }
+    } else {
+        game.lastAction = LastAction.ALREADY_ASSIGNED;
     }
     game.selectedDiceKeys.clear();
     let playerBestDice = bestDice(subgame, game.playerDice);
@@ -256,18 +279,25 @@ function nextResults() {
         calculateResults(nextSubgame);
     } else {
         // TODO: Add "reflection" step
-        nextRoundOrFinish();
+        endOfRoundOrFinish();
     }
 }
 
-function nextRoundOrFinish() {
+function endOfRoundOrFinish() {
+    game.lastAction = undefined;
     if (isGameFinished()) {
         game.step = Steps.FINISH;
+        game.renderFun(game);
     } else {
-        game.isPlayerStarting = !game.isPlayerStarting;
-        rollInitialDice();
+        game.step = Steps.END_OF_ROUND;
+        game.renderFun(game);
     }
 };
+
+function nextRound() {
+    game.isPlayerStarting = !game.isPlayerStarting;
+    rollInitialDice();
+}
 
 function isGameFinished() {
     return game.playerPoints >= 30 || game.rivalPoints >= 30 && !(game.playerPoints == game.rivalPoints);
@@ -390,6 +420,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         endRollingStep: endRollingStep,
         finishSubgame: finishSubgame,
         nextResults: nextResults,
+        nextRound: nextRound,
         rerollDice: rerollDice,
         rollInitialDice: rollInitialDice,
         startSubgame: startSubgame,
