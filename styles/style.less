@@ -199,10 +199,11 @@ div#scoreboardPlayer {
 
 			&:checked + .labelDie {
 				border-color: @color-border-hard;
+				border-style: dashed;
 			}
 
-			#game.bets &:checked + .labelDie {
-				border-style: dashed;
+			#game.rolling &:checked + .labelDie {
+				border-style: solid;
 			}
 		}
 
