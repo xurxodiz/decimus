@@ -1,6 +1,6 @@
 const MAX_AI_DICE = 5;
 const MAX_AI_ROLLS = 3;
-const SIMULATION_RUNS = 100;
+const SIMULATION_RUNS = 1000;
 
 function initializeAI() {
     return {
@@ -31,12 +31,27 @@ function rollFunction(game) {
 };
 
 function betFunction(game) {
-    let smallRaise = Math.floor(Math.random() * 2) + 1; // bet in [1,2]
+    let smallRaise = game.rivalBet == 0 ? 2 : Math.floor(Math.random() * 2) + 1; // bet in [1,2]
     let bigRaise = Math.floor(Math.random() * 4) + 3; // bet in [3,6]
+    let diffPoints = game.playerPoints - game.rivalPoints;
     let subgame = game.subgame;
     let winRate = game.rival.winRate[subgame];
-    if (winRate > 0.9) {
+    if (foldWillLose(game) || (game.playerPoints >= WIN_POINTS && diffPoints > 0)) {
+        // Player is winning, we need to play risky
+        return diffPoints + 5;
+    } else if (game.playerPoints < WIN_POINTS
+            && game.playerBet + game.playerPoints >= WIN_POINTS
+            && winRate <= 0.75) {
+        // The player might win the match, fold if not sure
+        return Bets.FOLD;
+    } else if (winRate > 0.99) {
         return bigRaise;
+    } else if (winRate > 0.9) {
+        if (game.playerBet > 9) {
+            return Bets.CHECK;
+        } else {
+            return bigRaise;
+        }
     } else if (winRate > 0.75) {
         if (game.playerBet > 2) {
             return Bets.CHECK;
@@ -64,6 +79,12 @@ function calculateWinRate(candidateDice) {
         winRate[subgame] = subgameWins/SIMULATION_RUNS;
     });
     return winRate;
+};
+
+function foldWillLose(game) {
+    const pointsInPlay = Math.max(1, game.rivalBet);
+    const potentialPoints = pointsInPlay + game.playerPoints;
+    return potentialPoints >= WIN_POINTS && potentialPoints >= game.rivalPoints;
 };
 
 function rollDice() {

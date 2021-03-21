@@ -595,10 +595,51 @@ describe('on the results step', () => {
                             expect(js.game.isPlayerStarting).toBeFalsy();
                         });
 
-                        test('and the rival will talk first next round', () => {
-                            nextRivalBet = 10;
-                            js.endRollingStep();
-                            expect(js.game.rivalBet).toBe(nextRivalBet);
+                        describe('the rival will talk first next round', () => {
+                            describe('and if raises', () => {
+                                beforeEach(() => {
+                                    nextRivalBet = 10;
+                                    js.endRollingStep();
+                                });
+
+                                test('the bet is raised', () => {
+                                    expect(js.game.rivalBet).toBe(nextRivalBet);
+                                });
+
+                                test('the bets are not set', () => {
+                                    expect(js.game.betsAreSet).toBeFalsy();
+                                });
+                            });
+
+                            describe('and if passes', () => {
+                                beforeEach(() => {
+                                    nextRivalBet = js.Bets.PASS;
+                                    js.endRollingStep();
+                                });
+
+                                test('the bet is 0', () => {
+                                    expect(js.game.rivalBet).toBe(0);
+                                });
+
+                                test('the bets are not set', () => {
+                                    expect(js.game.betsAreSet).toBeFalsy();
+                                });
+                            });
+
+                            describe('and if checks', () => {
+                                beforeEach(() => {
+                                    nextRivalBet = js.Bets.CHECK;
+                                    js.endRollingStep();
+                                });
+
+                                test('the bet is 0', () => {
+                                    expect(js.game.rivalBet).toBe(0);
+                                });
+
+                                test('the bets are not set', () => {
+                                    expect(js.game.betsAreSet).toBeFalsy();
+                                });
+                            });
                         });
                     });
                 });
