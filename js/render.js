@@ -108,7 +108,7 @@ function subgameToText(subgame) {
 }
 
 function getRaiseButtonText(lastAction) {
-    return (lastAction == LastAction.NONE_YET)? TEXT.betButton : TEXT.raiseButton;
+    return (lastAction == LastAction.NONE_YET || lastAction == LastAction.RIVAL_PASS)? TEXT.betButton : TEXT.raiseButton;
 }
 
 function getExplanationText(step, subgame) {
