@@ -7,8 +7,9 @@ let rival = {
     dice: [1,2,3,4,5]
 };
 
+const mockAudioCallback = jest.fn();
 const mockRenderFun = jest.fn();
-beforeEach(() => { js.beginGame(mockRenderFun, rival); });
+beforeEach(() => { js.beginGame(mockRenderFun, rival, mockAudioCallback); });
 
 test('game starts on splash step', () => {
     expect(js.game.step).toBe(js.Steps.SPLASH);
@@ -919,6 +920,27 @@ describe('determine winner', () => {
     });
 });
 
+describe('audio functions', () => {
+    test('enableUserHasSilenced', () => {
+        js.enableUserHasSilenced();
+        expect(js.readUserHasSilenced()).toBeTruthy();
+    });
+
+    test('disableUserHasSilenced', () => {
+        js.disableUserHasSilenced();
+        expect(js.readUserHasSilenced()).toBeFalsy();
+    });
+
+    test('setUserHasSilenced true', () => {
+        js.setUserHasSilenced(true);
+        expect(js.readUserHasSilenced()).toBeTruthy();
+    });
+
+    test('setUserHasSilenced false', () => {
+        js.setUserHasSilenced(false);
+        expect(js.readUserHasSilenced()).toBeFalsy();
+    });
+});
 describe('game can be restarted', () => {
     beforeEach(() => {
         js.game.playerPoints = 32;

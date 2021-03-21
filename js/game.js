@@ -8,6 +8,11 @@ let Alerts = {
     NON_POSITIVE_BET: -2
 };
 
+let Audios = {
+    MUSIC: 1,
+    ROLL: 2
+};
+
 let Bets = {
     PASS: -1,
     FOLD: -2,
@@ -65,6 +70,7 @@ var game = {
     lastAction: undefined,
     lastBetStanding: 0, // not strictly last bet raised, e.g. after fold, this is the points earned, not rejected
     isFirstBetOfRound: true,
+    audioCallback: undefined,
     renderFun: undefined,
     rival: undefined,
     alert: undefined, // used for alerts
@@ -78,8 +84,9 @@ function dismissAlert() {
 };
 
 // Splash step
-function beginGame(newRenderFun, rival) {
+function beginGame(newRenderFun, rival, audioCallback) {
     game.step = Steps.SPLASH;
+    game.audioCallback = audioCallback;
     game.renderFun = newRenderFun;
     game.rival = rival;
     game.playerPoints = 0;
@@ -95,7 +102,7 @@ function rollDie() {
 };
 
 function rollInitialDice() {
-    maybePlayAudio();
+    game.audioCallback(Audios.MUSIC);
     game.step = Steps.ROLLING;
     game.selectedDiceKeys.clear();
     game.remainingRerolls = MAX_REROLLS;
@@ -105,7 +112,7 @@ function rollInitialDice() {
         game.justRerolled.add(x);
     }
     game.rival.roll(game);
-    maybePlayDiceSoundEffect();
+    game.audioCallback(Audios.ROLL);
     game.renderFun(game);
     game.justRerolled.clear();
 };
@@ -123,7 +130,7 @@ function rerollDice() {
     game.remainingRerolls--;
     game.justRerolled = new Set(game.selectedDiceKeys);
     game.selectedDiceKeys.clear();
-    maybePlayDiceSoundEffect();
+    game.audioCallback(Audios.ROLL);
     game.renderFun(game);
 };
 
@@ -433,7 +440,6 @@ function disableUserHasSilenced() {
 
 function setUserHasSilenced(value) {
     game.userHasSilenced = value;
-    console.log(value);
     game.renderFun(game);
 }
 
@@ -469,6 +475,11 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         rerollDice: rerollDice,
         rollInitialDice: rollInitialDice,
         startSubgame: startSubgame,
-        updateSelectedDie: updateSelectedDie
+        updateSelectedDie: updateSelectedDie,
+        // Audio functions
+        enableUserHasSilenced: enableUserHasSilenced,
+        disableUserHasSilenced: disableUserHasSilenced,
+        setUserHasSilenced: setUserHasSilenced,
+        readUserHasSilenced: readUserHasSilenced
     };
 }

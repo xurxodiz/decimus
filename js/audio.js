@@ -20,6 +20,17 @@ function toggleAudio() {
     }
 }
 
+function audioCallback(type) {
+    switch (type) {
+        case Audios.MUSIC:
+            maybePlayAudio();
+            break;
+        case Audios.ROLL:
+            maybePlayDiceSoundEffect();
+            break;
+    }
+}
+
 function maybePlayAudio() {
     if (!readUserHasSilenced()) {
         playAudio();
@@ -47,5 +58,5 @@ function silenceAudio() {
 
 function activateAudio() {
     disableUserHasSilenced();
-    document.cookie = "userHasSilenced=false;samesite=strict"; 
+    document.cookie = "userHasSilenced=false;samesite=strict";
 }

@@ -2,7 +2,7 @@ let gameTemplate = undefined;
 
 function begin() {
     let rival = initializeAI();
-    beginGame(render, rival);
+    beginGame(render, rival, audioCallback);
 };
 
 function render(game) {
