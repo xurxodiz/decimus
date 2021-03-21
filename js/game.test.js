@@ -202,25 +202,25 @@ describe('on the bets step', () => {
                 js.betRaise(raise);
             });
 
-            test('bets are set', () => {
+            /*test('bets are set', () => {
                 expect(js.game.betsAreSet).toBeTruthy();
-            });
+            });*/
 
             test('player bet is raised', () => {
                 expect(js.game.playerBet).toBe(raise);
             });
 
-            test('rival bet is 0', () => {
+            /*test('rival bet is 0', () => {
                 expect(js.game.rivalBet).toBe(0);
-            });
+            });*/
 
             test('subgame pending bets are empty', () => {
                 expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
             });
 
-            test('player points increase by 1', () => {
+            /*test('player points increase by 1', () => {
                 expect(js.game.playerPoints).toBe(1);
-            });
+            });*/
         });
 
         describe("raises/check", () => {
@@ -584,11 +584,11 @@ describe('on the results step', () => {
                 describe('after one-as-two subgame', () => {
                     beforeEach(() => { js.nextResults(); });
 
-                    test('goes back to the rolling step', () => {
-                        expect(js.game.step).toBe(js.Steps.ROLLING);
+                    test('goes to end of round step', () => {
+                        expect(js.game.step).toBe(js.Steps.END_OF_ROUND);
                     });
 
-                    test('the starting player changes', () => {
+                    /*test('the starting player changes', () => {
                         expect(js.game.isPlayerStarting).toBeFalsy();
                     });
 
@@ -596,7 +596,7 @@ describe('on the results step', () => {
                         nextRivalBet = 10;
                         js.endRollingStep();
                         expect(js.game.rivalBet).toBe(nextRivalBet);
-                    });
+                    });*/
                 });
             });
         });
