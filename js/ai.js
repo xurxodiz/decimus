@@ -88,7 +88,7 @@ function foldWillLose(game) {
 };
 
 function passOrCheck(game) {
-    if (game.playerBet == 0) {
+    if (game.lastAction == LastAction.NONE_YET || game.lastAction == LastAction.USER_PASS) {
         return Bets.PASS;
     } else {
         return Bets.CHECK;

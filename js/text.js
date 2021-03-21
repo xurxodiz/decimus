@@ -31,9 +31,9 @@ const TEXT = {
 	subgamePairPlusAce: "par e as",
 
 	currentBetNoneYet: "Tócache apostar.",
-	currentBetUserPass: "Pasaches, queda {0}.",
+	currentBetUserPass: "Pasaches, queda a ver {0}.",
 	currentBetRivalPassFirst: "Pasou, tócache apostar.",
-	currentBetRivalPassSecond: "Pasou, queda {0}.",
+	currentBetRivalPassSecond: "Pasou, queda a ver {0}.",
 	currentBetRivalRaise: "{0} {1}.",
 	currentBetRivalRaiseBet: "Apostouche",
 	currentBetRivalRaiseRaise: "Subiuche a",

@@ -191,7 +191,7 @@ function betFold() {
 };
 
 function betPass() {
-    if(game.isPlayerStarting) {
+    if (game.isPlayerStarting) {
         rivalBet();
     } else {
         game.lastAction = LastAction.USER_PASS;
