@@ -1,0 +1,394 @@
+/* variables */
+/* fake selector for inheritance */
+.textbox,
+#alert,
+#help,
+#explanation,
+#info,
+#scoreboard div {
+  font-size: 2.5rem;
+  line-height: 3rem;
+  border: 2px solid white;
+  background-color: wheat;
+  filter: drop-shadow(0 0 0.5rem white);
+}
+/* rerolling animation */
+@keyframes rerolled {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* element styling */
+* {
+  font-family: 'MedievalSharp', cursive;
+}
+html {
+  font-size: 14pt;
+}
+body {
+  background-image: url("assets/background-transparent-50.png");
+  background-size: cover;
+  background-position: center;
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+}
+#canvas {
+  max-width: 800px;
+  max-height: 1500px;
+  width: 95vw;
+  height: 95vh;
+  margin: auto;
+}
+#game {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
+button,
+#alert button,
+#divButtons #betButtons #inputBetRaise {
+  cursor: pointer;
+  border-radius: 20px;
+  border: 4px solid saddlebrown;
+  background-color: darksalmon;
+  font-size: 2em;
+  filter: drop-shadow(0 0 0.75rem saddlebrown);
+}
+#alert {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  font-size: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#alert p {
+  width: 80%;
+  max-width: 600px;
+  text-align: center;
+}
+#alert button {
+  width: 35%;
+  max-width: 300px;
+  height: 5rem;
+  font-size: 3rem;
+}
+#btnHelpOpen,
+#btnHelpClose {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 2%;
+  height: 60px;
+  width: 60px;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+#btnHelpClose {
+  filter: none;
+}
+#btnHelpCloseEnd {
+  margin: 5% auto;
+  width: 30%;
+  max-width: 300px;
+  display: block;
+  height: 6%;
+  filter: none;
+  font-size: 2.5rem;
+}
+#help {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  z-index: 9998;
+  /* below #alert */
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  display: none;
+  /* starts hidden */
+}
+#help p {
+  margin: 2% 5%;
+  padding: 2%;
+}
+#help ul,
+#help h2 {
+  margin-left: 5%;
+}
+#help ul:nth-child(2),
+#help h2:nth-child(2) {
+  /* first h2 after the close button */
+  margin-top: 15%;
+}
+#help ul li,
+#help h2 li {
+  margin: 1%;
+}
+#btnToggleAudio {
+  position: absolute;
+  top: 0;
+  left: 70px;
+  margin: 2%;
+  height: 60px;
+  width: 60px;
+}
+#btnToggleAudio.paused {
+  opacity: 50%;
+}
+#explanation,
+#info {
+  width: 100%;
+  margin: 2%;
+  padding: 2%;
+}
+#game.splash #explanation {
+  text-align: center;
+}
+#info {
+  text-align: center;
+}
+#game.splash #info,
+#game.rolling #info {
+  text-align: left;
+}
+#scoreboard {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin: 4% 2%;
+}
+#scoreboard div {
+  width: 25%;
+  padding: 1%;
+  line-height: inherit;
+  background-color: lightblue;
+  filter: drop-shadow(0 0 0.75rem cornflowerblue);
+}
+#scoreboard div#scoreboardPlayer {
+  border-color: black;
+}
+#scoreboard div:first-child {
+  margin-right: 3%;
+}
+#scoreboard div span:first-child {
+  float: left;
+}
+#scoreboard div span:nth-child(2) {
+  float: right;
+  font-weight: bold;
+  font-size: 1.25em;
+}
+#playerDice,
+#rivalDice {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+#playerDice span,
+#rivalDice span {
+  margin: 2%;
+}
+#playerDice span .checkDie,
+#rivalDice span .checkDie {
+  display: none;
+}
+#playerDice span .checkDie:checked + .labelDie,
+#rivalDice span .checkDie:checked + .labelDie {
+  border-color: saddlebrown;
+  border-style: dotted;
+}
+#game.rolling #playerDice span .checkDie:checked + .labelDie,
+#game.rolling #rivalDice span .checkDie:checked + .labelDie {
+  border-style: solid;
+}
+#playerDice span .labelDie,
+#rivalDice span .labelDie {
+  display: flex;
+  border: 4px solid transparent;
+  width: 125px;
+  height: 125px;
+}
+#playerDice span .labelDie i,
+#rivalDice span .labelDie i {
+  width: 90px;
+  height: 90px;
+  display: block;
+  margin: auto;
+  filter: drop-shadow(0 0 1rem gainsboro);
+  background-size: cover;
+}
+#playerDice span .labelDie i.face1,
+#rivalDice span .labelDie i.face1 {
+  background-image: url("assets/dice/one.png");
+}
+#playerDice span .labelDie i.face2,
+#rivalDice span .labelDie i.face2 {
+  background-image: url("assets/dice/two.png");
+}
+#playerDice span .labelDie i.face3,
+#rivalDice span .labelDie i.face3 {
+  background-image: url("assets/dice/three.png");
+}
+#playerDice span .labelDie i.face4,
+#rivalDice span .labelDie i.face4 {
+  background-image: url("assets/dice/four.png");
+}
+#playerDice span .labelDie i.face5,
+#rivalDice span .labelDie i.face5 {
+  background-image: url("assets/dice/five.png");
+}
+#playerDice span .labelDie i.face6,
+#rivalDice span .labelDie i.face6 {
+  background-image: url("assets/dice/six.png");
+}
+#playerDice span .labelDie i.rivalFace1,
+#rivalDice span .labelDie i.rivalFace1 {
+  background-image: url("assets/dice/r-one.png");
+}
+#playerDice span .labelDie i.rivalFace2,
+#rivalDice span .labelDie i.rivalFace2 {
+  background-image: url("assets/dice/r-two.png");
+}
+#playerDice span .labelDie i.rivalFace3,
+#rivalDice span .labelDie i.rivalFace3 {
+  background-image: url("assets/dice/r-three.png");
+}
+#playerDice span .labelDie i.rivalFace4,
+#rivalDice span .labelDie i.rivalFace4 {
+  background-image: url("assets/dice/r-four.png");
+}
+#playerDice span .labelDie i.rivalFace5,
+#rivalDice span .labelDie i.rivalFace5 {
+  background-image: url("assets/dice/r-five.png");
+}
+#playerDice span .labelDie i.rivalFace6,
+#rivalDice span .labelDie i.rivalFace6 {
+  background-image: url("assets/dice/r-six.png");
+}
+#playerDice span .labelDie i.rerolled,
+#rivalDice span .labelDie i.rerolled {
+  animation-name: rerolled;
+  animation-duration: 100ms;
+  animation-iteration-count: 2;
+  animation-timing-function: linear;
+}
+#divButtons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 2%;
+  width: 100%;
+}
+#divButtons button {
+  margin: 2%;
+  width: 400px;
+  max-width: 30%;
+  height: 100px;
+  font-size: 2.3rem;
+}
+#divButtons #btnInitialThrow {
+  font-size: 2.5rem;
+}
+#divButtons #betButtons {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1%;
+}
+#divButtons #betButtons #btnBetRaise {
+  /* stick to #inputBetRaise: */
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+  margin-right: 0;
+}
+#divButtons #betButtons #inputBetRaise {
+  padding: 1.5%;
+  width: 15%;
+  max-width: 60px;
+  height: 68px;
+  /* we want it to look like btnBetRaise */
+  font-size: 2.65rem;
+  /* …except the cursor */
+  cursor: default;
+  /* …and the border, which is mirrored to mount over it */
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 1px solid saddlebrown;
+}
+/* screen size dependent tweaks */
+@media screen and (min-width: 1200px) {
+  /* in big screens, we reduce default text size and button size but increase button text size */
+  html {
+    font-size: 8pt;
+  }
+  #divButtons button,
+  #divButtons #btnInitialThrow {
+    font-size: 3em;
+    width: 300px;
+  }
+}
+@media screen and (max-height: 800px) {
+  /* reduce all sizes for small screens */
+  html {
+    font-size: 8pt;
+  }
+  #scoreboard {
+    max-height: 20%;
+  }
+  #explanation,
+  #info {
+    max-height: 15%;
+  }
+  #playerDice,
+  #rivalDice {
+    max-height: 15%;
+  }
+  #playerDice span .labelDie {
+    max-width: 75px;
+    max-height: 75px;
+  }
+  #playerDice span .labelDie i {
+    max-width: 50px;
+    max-height: 50px;
+  }
+  #rivalDice span .labelDie {
+    max-width: 75px;
+    max-height: 75px;
+  }
+  #rivalDice span .labelDie i {
+    max-width: 50px;
+    max-height: 50px;
+  }
+  #divButtons {
+    max-height: 10%;
+  }
+  #divButtons button {
+    max-height: 75px;
+  }
+  #divButtons #betButtons #inputBetRaise {
+    max-height: 43px;
+  }
+}
