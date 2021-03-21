@@ -1,49 +1,57 @@
+let gameTemplate = undefined;
+
 function begin() {
     let rival = initializeAI();
     beginGame(render, rival);
 };
 
 function render(game) {
-    fetch('templates/game.mustache')
-        .then((response) => response.text())
-        .then((template) => {
-            let gameToRender = {
-                screen: game.step,
-                stepSplash: game.step == Steps.SPLASH,
-                stepBets: game.step == Steps.BETS,
-                stepRolling: game.step == Steps.ROLLING,
-                stepResults: game.step == Steps.RESULTS,
-                stepEndOfRound: game.step == Steps.END_OF_ROUND,
-                stepFinish: game.step == Steps.FINISH,
-                playerScorePoints: game.playerPoints,
-                rivalScorePoints: game.rivalPoints,
-                canReroll: game.remainingRerolls > 0,
-                isFirstBet: game.lastAction == LastAction.NONE_YET,
-                betsAreSet: game.betsAreSet,
-                text: {...TEXT,
-                    calcCurrentBetDesc: getCurrentBetText(game.lastAction, game.isFirstBetOfRound),
-                    calcExplanationBox: getExplanationText(game.step, game.subgame),
-                    calcRaiseButton: getRaiseButtonText(game.lastAction),
-                    calcFinishResolution: getFinishText(game.playerPoints, game.rivalPoints),
-                    calcAlertPop: getAlertText(game.alert)
-                }
-            };
-            gameToRender.playerDice = game.playerDice.map(function(x, i) {
-                let selected = game.selectedDiceKeys.has(i);
-                let rerolled = game.justRerolled.has(i);
-                return {key: i, value: x, rerolled: rerolled, selected: selected};
+    if (!gameTemplate) {
+        fetch('templates/game.mustache')
+            .then((response) => response.text())
+            .then((template) => {
+                gameTemplate = template;
+                render(game);
             });
-            if (game.step == Steps.RESULTS) {
-                let rivalDice = game.rival.dice;
-                let selectedRivalDice = new Set(bestDice(game.subgame, rivalDice));
-                gameToRender.rivalDice = rivalDice.map(function(x, i) {
-                    let selected = selectedRivalDice.has(i);
-                    return {key: i, value: x, selected: selected};
-                });
-            }
-            let rendered = Mustache.render(template, gameToRender);
-            $('#canvas').html(rendered);
+        return;
+    }
+
+    let gameToRender = {
+        screen: game.step,
+        stepSplash: game.step == Steps.SPLASH,
+        stepBets: game.step == Steps.BETS,
+        stepRolling: game.step == Steps.ROLLING,
+        stepResults: game.step == Steps.RESULTS,
+        stepEndOfRound: game.step == Steps.END_OF_ROUND,
+        stepFinish: game.step == Steps.FINISH,
+        playerScorePoints: game.playerPoints,
+        rivalScorePoints: game.rivalPoints,
+        canReroll: game.remainingRerolls > 0,
+        isFirstBet: game.lastAction == LastAction.NONE_YET,
+        betsAreSet: game.betsAreSet,
+        text: {...TEXT,
+            calcCurrentBetDesc: getCurrentBetText(game.lastAction, game.isFirstBetOfRound),
+            calcExplanationBox: getExplanationText(game.step, game.subgame),
+            calcRaiseButton: getRaiseButtonText(game.lastAction),
+            calcFinishResolution: getFinishText(game.playerPoints, game.rivalPoints),
+            calcAlertPop: getAlertText(game.alert)
+        }
+    };
+    gameToRender.playerDice = game.playerDice.map(function(x, i) {
+        let selected = game.selectedDiceKeys.has(i);
+        let rerolled = game.justRerolled.has(i);
+        return {key: i, value: x, rerolled: rerolled, selected: selected};
+    });
+    if (game.step == Steps.RESULTS) {
+        let rivalDice = game.rival.dice;
+        let selectedRivalDice = new Set(bestDice(game.subgame, rivalDice));
+        gameToRender.rivalDice = rivalDice.map(function(x, i) {
+            let selected = selectedRivalDice.has(i);
+            return {key: i, value: x, selected: selected};
         });
+    }
+    let rendered = Mustache.render(gameTemplate, gameToRender);
+    $('#canvas').html(rendered);
 };
 
 function getCurrentBetText(lastAction, isFirstBetOfRound) {
