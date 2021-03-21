@@ -70,7 +70,7 @@ const TEXT = {
 	helpAndCredits: `
 	<h2>Decimus</h2>
     <p><strong>Decimus</strong> é un xogo de dados que mestura os divertimentos descritos por Afonso X no seu <em><a href="https://gl.wikipedia.org/wiki/Libro_de_los_juegos#Libro_dos_dados">Libro dos dados</a></em> coas regras do mus. O obxectivo é facer combinacións de dados que serán comparadas coas da rival nunha serie de apostas, e ter o maior número de puntos cando algunha xogadora iguale ou supere os trinta puntos.</p>
-    <p>Ao comezar a rolda, cada xogadora rolará en segredo os cinco dados. Se non está satisfeita co resultado, pode escoller os que desexe para volvelos a rolar. Outra vez máis, logo desa segunda rolada, a xogadora poderá escoller calquera número de dados para volvelos a rolar, incluíndo aqueles que non foran rolados na ocasión anterior. Despois diso, o resultado é final e comeza a fase de apostas.</p>
+    <p>Ao comezar a rolda, cada xogadora rolará en segredo os cinco dados. Se non está satisfeita co resultado, pode escoller os dados que desexe para volvelos a rolar e despois, de seguir descontenta, escoller e rolar unha vez máis. Despois diso, o resultado é final e comeza a fase de apostas.</p>
     <p>As xogadoras apostarán a ver quen ten a mellor combinación en catro xogos diferentes:</p>
     <ul>
       <li><strong>Maiores</strong>: gaña quen teña a combinación de tres dados cuxa suma sexa máxima.</li>
@@ -84,10 +84,10 @@ const TEXT = {
       <li><strong>Retirarse</strong>: a rival leva tantos puntos coma a última aposta da primeira xogadora. Se non houbo aposta previa, levará un punto.</li>
       <li><strong>Pasar</strong>: se non houbo apostas previas e ambas xogadoras pasan consecutivamente, o xogo resolverase na fase final con valor dun punto.</li>
       <li><strong>Ver</strong>: a aposta previa é aceptada e quedará pendente para resolver ao finalizar o resto dos xogos.</li>
-      <li><strong>Apostar</strong>: establece unha aposta nova que a outra xogadora poderá rexeitar, ver ou apostar máis.</li>
+      <li><strong>Apostar/Subir</strong>: establece unha aposta nova ou incrementa a actual, ante o que a outra xogadora poderá rexeitar, ver ou subir.</li>
     </ul>
-    <p>Unha vez establecidas as apostas dos catro xogos ambas xogadoras amosan os seus dados. Para cada xogo que quedase con apostas pendentes, determínase a gañadora segundo as regras do xogo e esta leva os apuntos apostados. En caso de empate nas combinacións, a primeira xogadora é a gañadora.</p>
-    <p>Logo de resolver todas as apostas a rolda remata. Se algunha xogadora iguala ou supera os trinta puntos a xogadora con máis puntos gaña a partida. Se ningunha os supera ou ambas teñen os mesmos puntos comeza unha nova rolda, alternando a condición de primeira xogadora.</p>
+    <p>Unha vez establecidas as apostas finais dos catro xogos ambas xogadoras amosan os seus dados. Para cada xogo que quedase con apostas pendentes, determínase a gañadora segundo as regras do xogo e esta leva os puntos apostados. En caso de empate nas combinacións, a primeira xogadora é a gañadora.</p>
+    <p>Logo de resolver todas as apostas a rolda remata. Se algunha xogadora iguala ou supera os 30 puntos, a xogadora con máis puntos gaña a partida. Se ningunha os supera ou ambas teñen os mesmos puntos comeza unha nova rolda, alternando a condición de primeira xogadora.</p>
     <h2>Créditos</h2>
     <p>Participación na <em>game jam</em> <a href="https://itch.io/jam/afonso-x-e-galicia">Afonso X e Galicia</a> do Consello da Cultura Galega, feita por <a href="https://xurxodiz.eu/">Xurxo Diz</a> e <a href="https://xogon.eu">Xoán González</a>. Código libre en <a href="https://github.com/xurxodiz/decimus">GitHub</a>.</p>
     <p>Imaxes dos dados por <a href="https://thenounproject.com/rose-alice-design/">Alice Design</a>.</p>
