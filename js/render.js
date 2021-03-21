@@ -16,6 +16,8 @@ function render(game) {
         return;
     }
 
+    let isFirstBet = game.lastAction == LastAction.NONE_YET ||
+                        (game.lastAction == LastAction.RIVAL_PASS && !game.isPlayerStarting)
     let gameToRender = {
         screen: game.step,
         stepSplash: game.step == Steps.SPLASH,
@@ -27,7 +29,7 @@ function render(game) {
         playerScorePoints: game.playerPoints,
         rivalScorePoints: game.rivalPoints,
         canReroll: game.remainingRerolls > 0,
-        isFirstBet: game.lastAction == LastAction.NONE_YET,
+        isFirstBet: isFirstBet,
         betsAreSet: game.betsAreSet,
         text: {...TEXT,
             calcCurrentBetDesc: getCurrentBetText(game.lastAction, game.isFirstBetOfRound),
@@ -58,7 +60,12 @@ function getCurrentBetText(lastAction, isFirstBetOfRound) {
     switch (lastAction) {
         case LastAction.NONE_YET: return TEXT.currentBetNoneYet;
         case LastAction.USER_PASS: return $.validator.format(TEXT.currentBetUserPass, [game.lastBetStanding]);
-        case LastAction.RIVAL_PASS: return $.validator.format(TEXT.currentBetRivalPass, [game.lastBetStanding]);
+        case LastAction.RIVAL_PASS:
+            if (game.isPlayerStarting) {
+                return $.validator.format(TEXT.currentBetRivalPassSecond, [game.lastBetStanding]);
+            } else {
+                return TEXT.currentBetRivalPassFirst;
+            }
         case LastAction.USER_RAISE: return $.validator.format(TEXT.currentBetUserRaise, [game.lastBetStanding]);
         case LastAction.RIVAL_RAISE: return $.validator.format(TEXT.currentBetRivalRaise,
             [((isFirstBetOfRound)? TEXT.currentBetRivalRaiseBet : TEXT.currentBetRivalRaiseRaise),

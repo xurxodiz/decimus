@@ -59,9 +59,9 @@ function betFunction(game) {
             return smallRaise;
         }
     } else if (winRate > 0.4 && game.playerBet <= 2) {
-        return Bets.CHECK;
+        return passOrCheck(game);
     } else if (game.playerBet <= 1) {
-        return Bets.CHECK;
+        return passOrCheck(game);
     }
     return Bets.FOLD;
 };
@@ -85,6 +85,14 @@ function foldWillLose(game) {
     const pointsInPlay = Math.max(1, game.rivalBet);
     const potentialPoints = pointsInPlay + game.playerPoints;
     return potentialPoints >= WIN_POINTS && potentialPoints >= game.rivalPoints;
+};
+
+function passOrCheck(game) {
+    if (game.lastAction == LastAction.NONE_YET || game.lastAction == LastAction.USER_PASS) {
+        return Bets.PASS;
+    } else {
+        return Bets.CHECK;
+    }
 };
 
 function rollDice() {
