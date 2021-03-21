@@ -222,7 +222,8 @@ function finishSubgame() {
 function rivalBet() {
     let action = game.rival.bet(game);
     switch (action) {
-        case Bets.FOLD, Bets.PASS:
+        case Bets.FOLD:
+        case Bets.PASS:
             // AI does not currently return PASS, it's collapsed with FOLD
             // so we need to tell it apart from context
             game.lastAction = (LastAction.USER_PASS)? LastAction.RIVAL_PASS : LastAction.RIVAL_FOLD;
@@ -419,6 +420,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         endRollingStep: endRollingStep,
         finishSubgame: finishSubgame,
         nextResults: nextResults,
+        nextRound: nextRound,
         rerollDice: rerollDice,
         rollInitialDice: rollInitialDice,
         startSubgame: startSubgame,
