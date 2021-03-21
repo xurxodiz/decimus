@@ -440,6 +440,7 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
         finishSubgame: finishSubgame,
         nextResults: nextResults,
         nextRound: nextRound,
+        playAgain: playAgain,
         rerollDice: rerollDice,
         rollInitialDice: rollInitialDice,
         startSubgame: startSubgame,
