@@ -412,6 +412,10 @@ function determineWinner(subgame, dice1, dice2, firstPlayerWinsTies) {
     }
 };
 
+function playAgain() {
+    beginGame(game.renderFun, game.rival);
+}
+
 // Exports
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     // Don't export module for the browser

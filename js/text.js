@@ -12,9 +12,13 @@ const TEXT = {
 	explanationSmallest: "En <strong>menores</strong> contan os dados con menor valor.",
 	explanationOneAsTwo: "En <strong>un en dous</strong> conta ter os dados máis pequenos tal que dous sumen o do outro.",
 	explanationPairPlusAce: "En <strong>par e as</strong> conta a maior parella acompañada de as que teñas.",
-	explanationResults: "Velaquí o resultado das túas apostas para {0}.",
-	explanationEndOfRound: "Terminou esta rolda. Pero aínda non gañou ninguén.",
+	explanationResults: "Velaquí o resultado das túas apostas para <strong>{0}</strong>.",
+	explanationEndOfRound: "Terminou esta rolda.",
 	explanationFinish: "A partida terminou.",
+
+	infoSplash: "Podes ler as regras na axuda, arriba á esquerda, ou ir lendo os lembretes breves segundo xogas.",
+	infoRolling: "Tenta quedar cun as e un bo reparto de dados altos e baixos.",
+	infoEndOfRound: "Aínda non gañou ninguén.",
 
 	initialButton: "Xogar",
 	rerollButton: "Rolar de novo",
@@ -55,6 +59,8 @@ const TEXT = {
 	playerWon: "Parabéns! Gañaches.",
 	tie: "Vaites, un empate…",
 	rivalWon: "Perdiches :(",
+
+	playAgainButton: "Xogar de novo",
 
 	helpButton: "?",
 	helpCloseButton: "x",

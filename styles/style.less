@@ -2,19 +2,21 @@
 
 @color-bg-soft: wheat;
 @color-bg-hard: darksalmon;
+@color-bg-accent: thistle;
 @color-border-player: black;
 @color-border-soft: white;
 @color-border-hard: saddlebrown;
+@color-border-accent: mediumpurple;
 @color-blur: gainsboro;
 
 /* fake selector for inheritance */
 
 .textbox {
-	font-size: 1.5em;
-	line-height: 1.5em;
-	border: 1px solid @color-border-soft;
+	font-size: 2.5rem;
+	line-height: 3rem;
+	border: 2px solid @color-border-soft;
 	background-color: @color-bg-soft;
-	filter: drop-shadow(0 0 0.75rem @color-border-soft);
+	filter: drop-shadow(0 0 0.5rem @color-border-soft);
 }
 
 
@@ -32,6 +34,10 @@
 
 * {
 	font-family: 'MedievalSharp', cursive;
+}
+
+html {
+	font-size: 14pt;
 }
 
 body {
@@ -68,7 +74,7 @@ button {
 	border-radius: 20px;
 	border: 4px solid @color-border-hard;
 	background-color: @color-bg-hard;
-	font-size: 1.5em;
+	font-size: 2em;
 	filter: drop-shadow(0 0 0.75rem @color-border-hard);
 }
 
@@ -80,7 +86,7 @@ button {
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	font-size: 3em;
+	font-size: 3rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -94,9 +100,10 @@ button {
 
 	button {
 		&:extend(button);
-		width: 50%;
-		max-width: 500px;
-		height: 1.5em;
+		width: 35%;
+		max-width: 300px;
+		height: 5rem;
+		font-size: 3rem;
 	}
 }
 
@@ -104,9 +111,10 @@ button {
 	position: absolute;
 	top: 0;
 	left: 0;
-	margin: 10px;
-	height: 55px;
-	width: 55px;
+	margin: 2%;
+	height: 5%;
+	width: 7%;
+	font-size: 2.5rem;
 	font-weight: bold;
 }
 
@@ -115,11 +123,13 @@ button {
 }
 
 #btnHelpCloseEnd {
-	margin: 50px auto;
-	width: 150px;
+	margin: 5% auto;
+	width: 30%;
+	max-width: 300px;
 	display: block;
-	height: 60px;
+	height: 6%;
 	filter: none;
+	font-size: 2.5rem;
 }
 
 #help {
@@ -144,38 +154,55 @@ button {
 	}
 }
 
-#explanation, #finish {
+#explanation, #info {
 	&:extend(.textbox);
 	width: 100%;
-	margin: 10px 100px;
-	padding: 20px;
+	margin: 2%;
+	padding: 2%;
+}
+
+#game.splash #explanation {
+	text-align: center;
+}
+
+#info {
+	text-align: center;
+
+	#game.splash &, #game.rolling & {
+		text-align: left;
+	}
 }
 
 #scoreboard {
 	width: 100%;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: flex-end;
-	margin-bottom: 20px;
+	justify-content: flex-end;
+	margin: 4% 2%;
 
 	div {
-		margin-right: 150px;
-		border: 1px solid @color-border-soft;
-		background-color: @color-bg-soft;
-		width: 120px;
-		padding: 5px;
-		margin-bottom: 5px;
+		&:extend(.textbox);
+		width: 25%;
+		padding: 1%;
+		line-height: inherit;
+		background-color: @color-bg-accent;
+		filter: drop-shadow(0 0 0.75rem @color-border-accent);
+
+		&:first-child {
+			margin-right: 3%;
+		} 
 
 		span {
 			&:first-child {
-				font-size: 1.5em;
+				opacity: 60%;
 				float: left;
 			}
 
 			&:nth-child(2) {
 				float: right;
 				font-weight: bold;
-				font-size: 2em;
+				font-size: 1.25em;
 			}
 		}
 	}
@@ -186,13 +213,12 @@ div#scoreboardPlayer {
 }
 
 #playerDice, #rivalDice {
-	margin-bottom: 20px;
 	display: flex;
 	width: 100%;
 	justify-content: center;
 
 	span {
-		margin: 10px;
+		margin: 2%;
 
 		.checkDie {
 			display: none;
@@ -209,19 +235,17 @@ div#scoreboardPlayer {
 
 		.labelDie {
 			display: flex;
-			border: 3px solid transparent;
-			width: 75px;
-			height: 75px;
-			font-size: 10em;
-			text-align: center;
+			border: 4px solid transparent;
+			width: 125px;
+			height: 125px;
 
 			i {
-				width: 50px;
-				height: 50px;
+				width: 90px;
+				height: 90px;
 				display: block;
-				background-size: 100%;
 				margin: auto;
 				filter: drop-shadow(0 0 1rem @color-blur);
+				background-size: cover;
 
 				&.face1 { background-image: url("assets/dice/one.png"); }
 				&.face2 { background-image: url("assets/dice/two.png"); }
@@ -248,28 +272,27 @@ div#scoreboardPlayer {
 	}
 }
 
+#rivalDice {
+	opacity: 60%;
+}
+
 #divButtons {
 	display: flex;
 	justify-content: center;
 	flex-wrap: wrap;
+	margin: 2%;
+	width: 100%;
 
 	button {
-		height: 80px;
-		width: 200px;
-		margin: 10px;
+		margin: 2%;
+		width: 400px;
+		max-width: 30%;
+		height: 100px;
+		font-size: 2.3rem;
 	}
 
 	#btnInitialThrow {
-		height: 100px;
-		font-size: 2.5em;
-	}
-
-	#currentBet {
-		&:extend(.textbox);
-		width: 100%;
-		margin: 15px 175px;
-		padding: 10px;
-		text-align: center;
+		font-size: 2.5rem;
 	}
 
 	#betButtons {
@@ -277,7 +300,7 @@ div#scoreboardPlayer {
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		margin: 10px;
+		margin: 1%;
 
 		#btnBetRaise {
 			/* stick to #inputBetRaise: */
@@ -288,21 +311,33 @@ div#scoreboardPlayer {
 		}
 
 		#inputBetRaise {
-			padding: 10px;
-			margin: 10px;
-			width: 50px;
-			/* neighbour button's 80px without padding (20px) and border (2x4px):
-			 * (yeah for some reason border counts for input's height but not for button's)
-			 */
-			height: 52px;
-			/* it's an input but we want it to look like the buttons… except the cursor */
+			padding: 1.5%;
+			width: 15%;
+			max-width: 60px;
+			height: 68px; // fit the height of btnBetRaise
+			/* we want it to look like btnBetRaise */
 			&:extend(button);
+			font-size: 2.65rem;
+			/* …except the cursor */
 			cursor: default;
-			/* mount over btnBetRaise: */
+			/* …and the border, which is mirrored to mount over it */
 			border-top-left-radius: 0;
 			border-bottom-left-radius: 0;
-			margin-left: -20px;
 			border-left: 1px solid @color-border-hard;
 		}
+	}
+}
+
+
+/* screen size dependent tweaks */
+
+@media screen and (min-width: 1200px) {
+	/* in big screens, we reduce default text size and button size but increase button text size */
+	html {
+		font-size: 8pt;
+	}
+	#divButtons button, #btnInitialThrow {
+		font-size: 3em;
+		width: 300px;
 	}
 }

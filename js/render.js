@@ -32,10 +32,9 @@ function render(game) {
         isFirstBet: isFirstBet,
         betsAreSet: game.betsAreSet,
         text: {...TEXT,
-            calcCurrentBetDesc: getCurrentBetText(game.lastAction, game.isFirstBetOfRound),
             calcExplanationBox: getExplanationText(game.step, game.subgame),
+            calcInfoBox: getInfoText(game),
             calcRaiseButton: getRaiseButtonText(game.lastAction),
-            calcFinishResolution: getFinishText(game.playerPoints, game.rivalPoints),
             calcAlertPop: getAlertText(game.alert)
         }
     };
@@ -56,31 +55,47 @@ function render(game) {
     $('#canvas').html(rendered);
 };
 
-function getCurrentBetText(lastAction, isFirstBetOfRound) {
-    switch (lastAction) {
-        case LastAction.NONE_YET: return TEXT.currentBetNoneYet;
-        case LastAction.USER_PASS: return $.validator.format(TEXT.currentBetUserPass, [game.lastBetStanding]);
-        case LastAction.RIVAL_PASS:
-            if (game.isPlayerStarting) {
-                return $.validator.format(TEXT.currentBetRivalPassSecond, [game.lastBetStanding]);
-            } else {
-                return TEXT.currentBetRivalPassFirst;
+function getInfoText(game) {
+    switch (game.step) {
+        case Steps.SPLASH: return TEXT.infoSplash;
+        case Steps.ROLLING: return TEXT.infoRolling;
+        case Steps.BETS:
+            switch (game.lastAction) {
+                case LastAction.NONE_YET: return TEXT.currentBetNoneYet;
+                case LastAction.USER_PASS: return $.validator.format(TEXT.currentBetUserPass, [game.lastBetStanding]);
+                case LastAction.RIVAL_PASS:
+                    if (game.isPlayerStarting) {
+                        return $.validator.format(TEXT.currentBetRivalPassSecond, [game.lastBetStanding]);
+                    } else {
+                        return TEXT.currentBetRivalPassFirst;
+                    }
+                case LastAction.USER_RAISE: return $.validator.format(TEXT.currentBetUserRaise, [game.lastBetStanding]);
+                case LastAction.RIVAL_RAISE: return $.validator.format(TEXT.currentBetRivalRaise,
+                    [((game.isFirstBetOfRound)? TEXT.currentBetRivalRaiseBet : TEXT.currentBetRivalRaiseRaise),
+                     game.lastBetStanding]);
+                case LastAction.USER_CHECK: return $.validator.format(TEXT.currentBetUserCheck, [game.lastBetStanding]);
+                case LastAction.RIVAL_CHECK: return $.validator.format(TEXT.currentBetRivalCheck, [game.lastBetStanding]);
+                case LastAction.USER_FOLD: return $.validator.format(TEXT.currentBetUserFold, [game.lastBetStanding]);
+                case LastAction.RIVAL_FOLD: return $.validator.format(TEXT.currentBetRivalFold, [game.lastBetStanding]);
+                case LastAction.NO_GAME: return TEXT.currentBetNoGame;
+                case LastAction.USER_NO_GAME: return $.validator.format(TEXT.currentBetUserNoGame, [game.lastBetStanding]);
+                case LastAction.RIVAL_NO_GAME: return $.validator.format(TEXT.currentBetRivalNoGame, [game.lastBetStanding]);
             }
-        case LastAction.USER_RAISE: return $.validator.format(TEXT.currentBetUserRaise, [game.lastBetStanding]);
-        case LastAction.RIVAL_RAISE: return $.validator.format(TEXT.currentBetRivalRaise,
-            [((isFirstBetOfRound)? TEXT.currentBetRivalRaiseBet : TEXT.currentBetRivalRaiseRaise),
-             game.lastBetStanding]);
-        case LastAction.USER_CHECK: return $.validator.format(TEXT.currentBetUserCheck, [game.lastBetStanding]);
-        case LastAction.RIVAL_CHECK: return $.validator.format(TEXT.currentBetRivalCheck, [game.lastBetStanding]);
-        case LastAction.USER_FOLD: return $.validator.format(TEXT.currentBetUserFold, [game.lastBetStanding]);
-        case LastAction.RIVAL_FOLD: return $.validator.format(TEXT.currentBetRivalFold, [game.lastBetStanding]);
-        case LastAction.NO_GAME: return TEXT.currentBetNoGame;
-        case LastAction.USER_NO_GAME: return $.validator.format(TEXT.currentBetUserNoGame, [game.lastBetStanding]);
-        case LastAction.RIVAL_NO_GAME: return $.validator.format(TEXT.currentBetRivalNoGame, [game.lastBetStanding]);
-        case LastAction.USER_WON_CHECK: return $.validator.format(TEXT.currentBetUserWonCheck, [game.lastBetStanding]);
-        case LastAction.RIVAL_WON_CHECK: return $.validator.format(TEXT.currentBetRivalWonCheck, [game.lastBetStanding]);
-        case LastAction.ALREADY_ASSIGNED: return TEXT.currentBetAlreadyAssigned;
+        case Steps.RESULTS:
+            switch (game.lastAction) {
+                case LastAction.USER_WON_CHECK: return $.validator.format(TEXT.currentBetUserWonCheck, [game.lastBetStanding]);
+                case LastAction.RIVAL_WON_CHECK: return $.validator.format(TEXT.currentBetRivalWonCheck, [game.lastBetStanding]);
+                case LastAction.ALREADY_ASSIGNED: return TEXT.currentBetAlreadyAssigned;
+            }
+        case Steps.END_OF_ROUND: return TEXT.infoEndOfRound;
+        case Steps.FINISH:
+            switch (Math.sign(game.playerPoints-game.rivalPoints)) {
+                case  1: return TEXT.playerWon;
+                case  0: return TEXT.tie;
+                case -1: return TEXT.rivalWon
+            }
     }
+
 }
 
 function subgameToText(subgame) {
@@ -110,14 +125,6 @@ function getExplanationText(step, subgame) {
         case Steps.RESULTS: return $.validator.format(TEXT.explanationResults, [subgameToText(subgame)]);
         case Steps.END_OF_ROUND: return TEXT.explanationEndOfRound;
         case Steps.FINISH: return TEXT.explanationFinish;
-    }
-}
-
-function getFinishText(playerPoints, rivalPoints) {
-    switch (Math.sign(playerPoints-rivalPoints)) {
-        case  1: return TEXT.playerWon;
-        case  0: return TEXT.tie;
-        case -1: return TEXT.rivalWon
     }
 }
 

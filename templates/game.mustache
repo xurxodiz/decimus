@@ -28,23 +28,30 @@
 
     <div id="explanation">{{{text.calcExplanationBox}}}</div>
 
-    <div id="rivalDice">
-        {{#rivalDice}}
-            <span>
-                <input id="inputRivalDie{{key}}" type="checkbox" value="rivalDie{{key}}" class="checkDie" disabled {{#selected}}checked{{/selected}}/>
-                <label id="rivalDie{{key}}" for="inputRivalDie{{key}}" class="labelDie"><i class="rivalFace{{value}}"></i></label>
-            </span>
-        {{/rivalDice}}
-    </div>
-    <div id="playerDice">
-        {{#playerDice}}
-            <span>
-                <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
-                       onchange="updateSelectedDie({{key}}, this.checked)" {{^stepRolling}}disabled{{/stepRolling}} {{#selected}}checked{{/selected}}/>
-                <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}{{#rerolled}} rerolled{{/rerolled}}"></i></label>
-            </span>
-        {{/playerDice}}
-    </div>
+    {{#stepResults}}
+        <div id="rivalDice">
+            {{#rivalDice}}
+                <span>
+                    <input id="inputRivalDie{{key}}" type="checkbox" value="rivalDie{{key}}" class="checkDie" disabled {{#selected}}checked{{/selected}}/>
+                    <label id="rivalDie{{key}}" for="inputRivalDie{{key}}" class="labelDie"><i class="rivalFace{{value}}"></i></label>
+                </span>
+            {{/rivalDice}}
+        </div>
+    {{/stepResults}}
+    {{^stepSplash}}
+        <div id="playerDice">
+            {{#playerDice}}
+                <span>
+                    <input id="inputDie{{key}}" type="checkbox" value="die{{key}}" class="checkDie"
+                           onchange="updateSelectedDie({{key}}, this.checked)" {{^stepRolling}}disabled{{/stepRolling}} {{#selected}}checked{{/selected}}/>
+                    <label id="die{{key}}" for="inputDie{{key}}" class="labelDie"><i class="face{{value}}{{#rerolled}} rerolled{{/rerolled}}"></i></label>
+                </span>
+            {{/playerDice}}
+        </div>
+    {{/stepSplash}}
+
+    <div id="info">{{text.calcInfoBox}}</div>
+    
     <div id="divButtons">
         {{#stepSplash}}
             <button id="btnInitialThrow" onClick="rollInitialDice()">{{text.initialButton}}</button>
@@ -55,12 +62,9 @@
             {{/canReroll}}
             <button id="btnEndRolls" onclick="endRollingStep()">{{text.endRollsButton}}</button>
         {{/stepRolling}}
-        {{#text.calcCurrentBetDesc}}
-            <div id="currentBet">{{text.calcCurrentBetDesc}}</div>
-        {{/text.calcCurrentBetDesc}}
         {{#stepBets}}
-            {{^betsAreSet}}
-                <div id="betButtons">
+            <div id="betButtons">
+                {{^betsAreSet}}
                     {{#isFirstBet}}
                         <button id="btnBetPass" onClick="betPass()">{{text.passButton}}</button>
                     {{/isFirstBet}}
@@ -70,11 +74,11 @@
                     {{/isFirstBet}}
                     <button id="btnBetRaise" onClick="betRaise(parseInt($('#inputBetRaise')[0].value))">{{text.calcRaiseButton}}</button>
                     <input  id="inputBetRaise" type="number" value="1" min="1" max="10">
-                </div>
-            {{/betsAreSet}}
-            {{#betsAreSet}}
-                <button id="btnFinishSubgame" onClick="finishSubgame()">{{text.finishSubgameButton}}</button>
-            {{/betsAreSet}}
+                {{/betsAreSet}}
+                {{#betsAreSet}}
+                    <button id="btnFinishSubgame" onClick="finishSubgame()">{{text.finishSubgameButton}}</button>
+                {{/betsAreSet}}
+            </div>
         {{/stepBets}}
         {{#stepResults}}
             <button id="btnNextResults" onClick="nextResults()">{{text.nextResultsButton}}</button>
@@ -83,7 +87,7 @@
             <button id="btnEndOfRound" onClick="nextRound()">{{text.nextRoundButton}}</button>
         {{/stepEndOfRound}}
         {{#stepFinish}}
-            <div id="finish">{{text.calcFinishResolution}}</div>
+            <button id="btnPlayAgain" onClick="playAgain()">{{text.playAgainButton}}</button>
         {{/stepFinish}}
     </div>
 </div>
