@@ -168,8 +168,8 @@ describe('on the bets step', () => {
                 expect(js.game.rivalBet).toBe(0);
             });
 
-            test('subgame pending bets are empty', () => {
-                expect(js.game.pendingBets[js.game.subgame]).toBeUndefined();
+            test('subgame pending bet is 1', () => {
+                expect(js.game.pendingBets[js.game.subgame]).toBe(1);
             });
         });
 
@@ -623,6 +623,18 @@ describe('on the results step', () => {
 
                                 test('the bets are not set', () => {
                                     expect(js.game.betsAreSet).toBeFalsy();
+                                });
+
+                                describe('and the user also passes', () => {
+                                    beforeEach(() => { js.betPass(); });
+
+                                    test('the bet is pending', () => {
+                                        expect(js.game.pendingBets[js.game.subgame]).toBe(1);
+                                    });
+
+                                    test('the bets are set', () => {
+                                        expect(js.game.betsAreSet).toBeTruthy();
+                                    });
                                 });
                             });
 

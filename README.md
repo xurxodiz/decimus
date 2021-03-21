@@ -18,7 +18,7 @@ Nestes dous últimos xogos pode darse o caso de que unha ou as dúas xogadoras n
 
 Comezando pola primeira xogadora, cada unha terá que escoller entre retirarse, pasar, ver ou apostar alternativamente:
 * **Retirarse**: a rival leva tantos puntos coma a última aposta da primeira xogadora. Se non houbo aposta previa, levará un punto.
-* **Pasar**: se non houbo apostas previas e ambas xogadoras pasan consecutivamente, o xogo rematará sen reparto de puntos.
+* **Pasar**: se non houbo apostas previas e ambas xogadoras pasan consecutivamente, o xogo resolverase na fase final con valor dun punto.
 * **Ver**: a aposta previa é aceptada e quedará pendente para resolver ao finalizar o resto dos xogos.
 * **Apostar**: establece unha aposta nova que a outra xogadora poderá rexeitar, ver ou apostar máis.
 

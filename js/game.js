@@ -191,9 +191,15 @@ function betFold() {
 };
 
 function betPass() {
-    game.lastAction = LastAction.USER_PASS;
+    if(game.isPlayerStarting) {
+        rivalBet();
+    } else {
+        game.lastAction = LastAction.USER_PASS;
+        game.betsAreSet = true;
+        game.lastBetStanding = 1;
+        game.pendingBets[game.subgame] = 1;
+    }
     game.isFirstBetOfRound = false;
-    rivalBet();
     game.renderFun(game);
 };
 
@@ -226,6 +232,8 @@ function rivalBet() {
         case Bets.PASS:
             game.lastAction = LastAction.RIVAL_PASS;
             if (game.isPlayerStarting || game.playerBet > 0) {
+                game.lastBetStanding = 1;
+                game.pendingBets[game.subgame] = 1;
                 game.betsAreSet = true;
             }
             break;
