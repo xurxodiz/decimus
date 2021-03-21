@@ -30,4 +30,4 @@ Logo de resolver todas as apostas a rolda remata. Se algunha xogadora iguala ou 
 
 Imaxes dos dados por [Alice Design](https://thenounproject.com/rose-alice-design/).
 
-![Statements](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)
+![Statements](https://img.shields.io/badge/Coverage-99.54%25-brightgreen.svg)
