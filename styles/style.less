@@ -51,10 +51,10 @@ body {
 }
 
 #canvas {
-	width: 800px;
-	height: 1200px;
-	max-width: 95vw;
-	max-height: 95vh;
+	max-width: 800px;
+	max-height: 1500px;
+	width: 95vw;
+	height: 95vh;
 	margin: auto;
 }
 
@@ -112,8 +112,8 @@ button {
 	top: 0;
 	left: 0;
 	margin: 2%;
-	height: 5%;
-	width: 7%;
+	height: 60px;
+	width: 60px;
 	font-size: 2.5rem;
 	font-weight: bold;
 }
@@ -147,9 +147,19 @@ button {
 	display: none; /* starts hidden */
 
 	p {
-		margin: 5px 20px;
-		&:nth-child(2) { /* first p after the close button */
-			margin-top: 100px;
+		margin: 2% 5%;
+		padding: 2%;
+	}
+
+	ul, h2 {
+		margin-left: 5%;
+
+		&:nth-child(2) { /* first h2 after the close button */
+			margin-top: 15%;
+		}
+
+		li {
+			margin: 1%;
 		}
 	}
 }
@@ -189,13 +199,21 @@ button {
 		background-color: @color-bg-accent;
 		filter: drop-shadow(0 0 0.75rem @color-border-accent);
 
+
+		&#scoreboardRival {
+			opacity: 60%;
+		}
+
+		&#scoreboardPlayer {
+			border-color: @color-border-player;
+		}
+
 		&:first-child {
 			margin-right: 3%;
 		} 
 
 		span {
 			&:first-child {
-				opacity: 60%;
 				float: left;
 			}
 
@@ -206,10 +224,6 @@ button {
 			}
 		}
 	}
-}
-
-div#scoreboardPlayer {
-	border: 1px solid @color-border-player;
 }
 
 #playerDice, #rivalDice {
@@ -336,7 +350,7 @@ div#scoreboardPlayer {
 	html {
 		font-size: 8pt;
 	}
-	#divButtons button, #btnInitialThrow {
+	#divButtons button, #divButtons #btnInitialThrow {
 		font-size: 3em;
 		width: 300px;
 	}

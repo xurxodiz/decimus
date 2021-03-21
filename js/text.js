@@ -66,7 +66,8 @@ const TEXT = {
 	helpCloseButton: "x",
 	helpCloseEndButton: "Pechar",
 	helpAndCredits: `
-    <p><strong>Decimus</strong> é un xogo de dados que mestura os xogos descritos por Afonso X no seu <em><a href="https://gl.wikipedia.org/wiki/Libro_de_los_juegos#Libro_dos_dados">Libro dos dados</a></em> coas regras do Mus. O obxectivo é facer combinacións de dados que serán comparadas coas da rival nunha serie de apostas, e ter o maior número de puntos cando algunha xogadora iguale ou supere os trinta puntos.</p>
+	<h2>Decimus</h2>
+    <p><strong>Decimus</strong> é un xogo de dados que mestura os divertimentos descritos por Afonso X no seu <em><a href="https://gl.wikipedia.org/wiki/Libro_de_los_juegos#Libro_dos_dados">Libro dos dados</a></em> coas regras do mus. O obxectivo é facer combinacións de dados que serán comparadas coas da rival nunha serie de apostas, e ter o maior número de puntos cando algunha xogadora iguale ou supere os trinta puntos.</p>
     <p>Ao comezar a rolda, cada xogadora rolará en segredo os cinco dados. Se non está satisfeita co resultado, pode escoller os que desexe para volvelos a rolar. Outra vez máis, logo desa segunda rolada, a xogadora poderá escoller calquera número de dados para volvelos a rolar, incluíndo aqueles que non foran rolados na ocasión anterior. Despois diso, o resultado é final e comeza a fase de apostas.</p>
     <p>As xogadoras apostarán a ver quen ten a mellor combinación en catro xogos diferentes:</p>
     <ul>
