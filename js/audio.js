@@ -1,5 +1,5 @@
 function initAudio() {
-    $("#soundtrack")[0].volume = 0.1;
+    $("#soundtrack")[0].volume = 0.2;
     $("#sfx")[0].volume = 0.3;
 }
 

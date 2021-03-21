@@ -11,7 +11,7 @@ const TEXT = {
 	explanationBiggest: "En <strong>maiores</strong> contan os dados con maior valor.",
 	explanationSmallest: "En <strong>menores</strong> contan os dados con menor valor.",
 	explanationOneAsTwo: "En <strong>un en dous</strong> conta ter os dados máis pequenos tal que dous sumen o do outro.",
-	explanationPairPlusAce: "En <strong>par e as</strong> conta a maior parella acompañada de as que teñas.",
+	explanationPairPlusAce: "En <strong>par con as</strong> conta a maior parella acompañada de as que teñas.",
 	explanationResults: "Velaquí o resultado das túas apostas para <strong>{0}</strong>.",
 	explanationEndOfRound: "Terminou esta rolda.",
 	explanationFinish: "A partida terminou.",
@@ -32,7 +32,7 @@ const TEXT = {
 	subgameBiggest: "maiores",
 	subgameSmallest: "menores",
 	subgameOneAsTwo: "un en dous",
-	subgamePairPlusAce: "par e as",
+	subgamePairPlusAce: "par con as",
 
 	currentBetNoneYet: "Tócache apostar.",
 	currentBetUserPass: "Pasaches, queda a ver {0}.",
@@ -76,7 +76,7 @@ const TEXT = {
       <li><strong>Maiores</strong>: gaña quen teña a combinación de tres dados cuxa suma sexa máxima.</li>
       <li><strong>Menores</strong>: gaña quen teña a combinación de tres dados cuxa suma sexa mínima.</li>
       <li><strong>Un en dous</strong>: gaña quen teña dados máis pequenos tal que dous sumen outro.</li>
-      <li><strong>Par e as</strong>: gaña quen teña a maior parella acompañada de as.</li>
+      <li><strong>Par con as</strong>: gaña quen teña a maior parella acompañada de as.</li>
     </ul>
     <p>Nestes dous últimos xogos pode darse o caso de que unha ou as dúas xogadoras non teñan unha combinación válida. Cada unha terá que anunciar se ten combinación válida ou non. Se ningunha ten, o xogo non se puntúa. Se unha ten e a outra non, a primeira leva un punto inmediatamente. Noutro caso, ao igual ca en maiores ou menores, continúase coa seguinte parte da fase de apostas.</p>
     <p>Comezando pola primeira xogadora, cada unha terá que escoller entre retirarse, pasar, ver ou apostar alternativamente:</p>
@@ -91,6 +91,7 @@ const TEXT = {
     <h2>Créditos</h2>
     <p>Participación na <em>game jam</em> <a href="https://itch.io/jam/afonso-x-e-galicia">Afonso X e Galicia</a> do Consello da Cultura Galega, feita por <a href="https://xurxodiz.eu/">Xurxo Diz</a> e <a href="https://xogon.eu">Xoán González</a>. Código libre en <a href="https://github.com/xurxodiz/decimus">GitHub</a>.</p>
     <p>Imaxes dos dados por <a href="https://thenounproject.com/rose-alice-design/">Alice Design</a>.</p>
-    <p>A <a href="https://en.wikipedia.org/wiki/File:Santa_Maria.ogg">cantiga de Santa María</a> pertence ao dominio público. O son dos dados está básado nun de <a href="https://soundbible.com/182-Shake-And-Roll-Dice.html">Mike Koenig</a>.</p>
+    <p>A grabación da <a href="https://en.wikipedia.org/wiki/File:Santa_Maria.ogg">cantiga de Santa María</a> pertence ao dominio público e reprodúcese superposta sobre os sons dun mercado grabado por <a href="https://freesound.org/people/Metzik/sounds/371222/">Metzik</a>. O son dos dados está básado nun de <a href="https://soundbible.com/182-Shake-And-Roll-Dice.html">Mike Koenig</a>.</p>
+    <p>A imaxe de fondo é unha ilustración tirada de, como non, o <em>Libro dos dados</em> de Afonso X.</p>
 	`
 };
