@@ -164,6 +164,19 @@ button {
 	}
 }
 
+#btnToggleAudio {
+	position: absolute;
+	top: 0;
+	left: 70px;
+	margin: 10px;
+	height: 55px;
+	width: 55px;
+
+	&.paused {
+		opacity: 50%;
+	}
+}
+
 #explanation, #info {
 	&:extend(.textbox);
 	width: 100%;

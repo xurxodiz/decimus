@@ -67,7 +67,8 @@ var game = {
     isFirstBetOfRound: true,
     renderFun: undefined,
     rival: undefined,
-    alert: undefined // used for alerts
+    alert: undefined, // used for alerts
+    userHasSilenced: false
 };
 
 
@@ -94,6 +95,7 @@ function rollDie() {
 };
 
 function rollInitialDice() {
+    maybePlayAudio();
     game.step = Steps.ROLLING;
     game.selectedDiceKeys.clear();
     game.remainingRerolls = MAX_REROLLS;
@@ -103,6 +105,7 @@ function rollInitialDice() {
         game.justRerolled.add(x);
     }
     game.rival.roll(game);
+    maybePlayDiceSoundEffect();
     game.renderFun(game);
     game.justRerolled.clear();
 };
@@ -120,6 +123,7 @@ function rerollDice() {
     game.remainingRerolls--;
     game.justRerolled = new Set(game.selectedDiceKeys);
     game.selectedDiceKeys.clear();
+    maybePlayDiceSoundEffect();
     game.renderFun(game);
 };
 
@@ -412,8 +416,29 @@ function determineWinner(subgame, dice1, dice2, firstPlayerWinsTies) {
     }
 };
 
+
 function playAgain() {
-    beginGame(game.renderFun, game.rival);
+    beginGame(game.renderFun, game.rival, game.audioCallback);
+}
+
+function enableUserHasSilenced() {
+    game.userHasSilenced = true;
+    game.renderFun(game);
+}
+
+function disableUserHasSilenced() {
+    game.userHasSilenced = false;
+    game.renderFun(game);
+}
+
+function setUserHasSilenced(value) {
+    game.userHasSilenced = value;
+    console.log(value);
+    game.renderFun(game);
+}
+
+function readUserHasSilenced() {
+    return game.userHasSilenced;
 }
 
 // Exports

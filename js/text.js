@@ -61,6 +61,8 @@ const TEXT = {
 	rivalWon: "Perdiches :(",
 
 	playAgainButton: "Xogar de novo",
+	audioPlayingButton: "🔊",
+	audioPausedButton: "🔇",
 
 	helpButton: "?",
 	helpCloseButton: "x",
@@ -89,5 +91,6 @@ const TEXT = {
     <h2>Créditos</h2>
     <p>Participación na <em>game jam</em> <a href="https://itch.io/jam/afonso-x-e-galicia">Afonso X e Galicia</a> do Consello da Cultura Galega, feita por <a href="https://xurxodiz.eu/">Xurxo Diz</a> e <a href="https://xogon.eu">Xoán González</a>. Código libre en <a href="https://github.com/xurxodiz/decimus">GitHub</a>.</p>
     <p>Imaxes dos dados por <a href="https://thenounproject.com/rose-alice-design/">Alice Design</a>.</p>
+    <p>A <a href="https://en.wikipedia.org/wiki/File:Santa_Maria.ogg">cantiga de Santa María</a> pertence ao dominio público. O son dos dados está básado nun de <a href="https://soundbible.com/182-Shake-And-Roll-Dice.html">Mike Koenig</a>.</p>
 	`
 };

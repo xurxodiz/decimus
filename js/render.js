@@ -15,7 +15,7 @@ function render(game) {
             });
         return;
     }
-
+    console.log("audio");
     let isFirstBet = game.lastAction == LastAction.NONE_YET ||
                         (game.lastAction == LastAction.RIVAL_PASS && !game.isPlayerStarting)
     let gameToRender = {
@@ -31,6 +31,7 @@ function render(game) {
         canReroll: game.remainingRerolls > 0,
         isFirstBet: isFirstBet,
         betsAreSet: game.betsAreSet,
+        userHasSilenced: game.userHasSilenced,
         text: {...TEXT,
             calcExplanationBox: getExplanationText(game.step, game.subgame),
             calcInfoBox: getInfoText(game),

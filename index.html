@@ -15,12 +15,19 @@
         <script type="text/javascript" src="js/game.js"></script>
         <script type="text/javascript" src="js/ai.js"></script>
         <script type="text/javascript" src="js/text.js"></script>
+        <script type="text/javascript" src="js/audio.js"></script>
         <script type="text/javascript" src="js/vendor/jquery-3.6.0.min.js"></script>
         <script type="text/javascript" src="js/vendor/less-4.1.1.min.js"></script>
         <script type="text/javascript" src="js/vendor/jquery.validate-1.19.3.min.js"></script>
         <script type="text/javascript" src="js/vendor/mustache-3.1.0.min.js"></script>
     </head>
-    <body onload="begin()">
+    <body onload="begin(); initAudio()">
+        <audio id="soundtrack" loop>
+            <source src="audio/santa_maria.ogg" type="audio/ogg">
+        </audio>
+        <audio id="sfx">
+            <source src="audio/dice.wav" type="audio/wave">
+        </audio>
         <div id="canvas"></div>
     </body>
 </html>
