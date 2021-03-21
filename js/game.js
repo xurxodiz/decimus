@@ -310,6 +310,7 @@ function nextResults() {
 
 function endOfRoundOrFinish() {
     game.lastAction = undefined;
+    game.selectedDiceKeys.clear();
     if (isGameFinished()) {
         game.step = Steps.FINISH;
         game.renderFun(game);
