@@ -12,7 +12,7 @@ As xogadoras apostarán a ver quen ten a mellor combinación en catro xogos dife
 * **Maiores**: gaña quen teña a combinación de tres dados cuxa suma sexa máxima.
 * **Menores**: gaña quen teña a combinación de tres dados cuxa suma sexa mínima.
 * **Un en dous**: gaña quen teña dados máis pequenos tal que dous sumen outro.
-* **Par e as**: gaña quen teña a maior parella acompañada de as.
+* **Par con as**: gaña quen teña a maior parella acompañada de as.
 
 Nestes dous últimos xogos pode darse o caso de que unha ou as dúas xogadoras non teñan unha combinación válida. Cada unha terá que anunciar se ten combinación válida ou non. Se ningunha ten, o xogo non se puntúa. Se unha ten e a outra non, a primeira leva un punto inmediatamente. Noutro caso, ao igual ca en maiores ou menores, continúase coa seguinte parte da fase de apostas.
 
@@ -29,5 +29,6 @@ Logo de resolver todas as apostas a rolda remata. Se algunha xogadora iguala ou 
 ## Créditos adicionais
 
 Imaxes dos dados por [Alice Design](https://thenounproject.com/rose-alice-design/).
+A grabación da [cantiga de Santa María](https://en.wikipedia.org/wiki/File:Santa_Maria.ogg) pertence ao dominio público e reprodúcese superposta sobre os sons dun mercado grabado por [Metzik](https://freesound.org/people/Metzik/sounds/371222/). O son dos dados está básado nun de [Mike Koenig](https://soundbible.com/182-Shake-And-Roll-Dice.html).
 
 ![Statements](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)
